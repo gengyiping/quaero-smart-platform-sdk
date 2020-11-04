@@ -1,0 +1,52 @@
+server:
+  port: 8890
+spring:
+  application:
+    name: quaero-smart-platform
+
+  profiles:
+    active: dev
+
+  jackson:
+    serialization:                        #null字段自动忽略
+      indent_output: true                 #格式化打印json字符串
+      fail_on_empty_beans: false          #循环依赖自动拆开
+    default-property-inclusion: non_null  #null输出忽略
+    date-format: "yyyy-MM-dd HH:mm:ss"    #默认日期格式化
+    time-zone: GMT+8
+    deserialization:
+      fail_on_unknown_properties: false
+
+  servlet:
+    multipart:
+      # 开启 multipart 上传功能
+      enabled: true
+      # 文件写入磁盘的阈值
+      file-size-threshold: 2KB
+      # 最大文件大小
+      max-file-size: 200MB
+      # 最大请求大小
+      max-request-size: 215MB
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+      field-strategy: not_empty
+      #驼峰下划线转换
+      column-underline: true
+      #逻辑删除配置
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+      db-type: mssql
+    refresh: false
+    configuration:
+      map-underscore-to-camel-case: true
+      cache-enabled: false
+  configuration:
+    map-underscore-to-camel-case: true
+    auto-mapping-behavior: full
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  type-aliases-package: com.quaero.quaerosmartplatform.domain.entity
+logging:
+  config: classpath:log4j2.xml
