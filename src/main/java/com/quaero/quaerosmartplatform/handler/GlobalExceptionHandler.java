@@ -1,7 +1,7 @@
 package com.quaero.quaerosmartplatform.handler;
 
+import com.quaero.quaerosmartplatform.domain.result.DefaultErrorResult;
 import com.quaero.quaerosmartplatform.exceptions.BusinessException;
-import com.quaero.quaerosmartplatform.result.DefaultErrorResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;

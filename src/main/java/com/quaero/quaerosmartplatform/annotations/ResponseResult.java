@@ -1,8 +1,8 @@
 package com.quaero.quaerosmartplatform.annotations;
 
 
-import com.quaero.quaerosmartplatform.result.PlatformResult;
-import com.quaero.quaerosmartplatform.result.Result;
+import com.quaero.quaerosmartplatform.domain.result.PlatformResult;
+import com.quaero.quaerosmartplatform.domain.result.Result;
 
 import java.lang.annotation.*;
 

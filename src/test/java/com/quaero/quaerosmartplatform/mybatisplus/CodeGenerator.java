@@ -22,7 +22,7 @@ public class CodeGenerator {
     public void generateCode() {
         String packageName = "com.quaero.quaerosmartplatform";
         boolean serviceNameStartWithI = false;//user -> UserService, 设置成true: user -> IUserService
-        generateByTables(serviceNameStartWithI, packageName, "@JX_PDA001");
+        generateByTables(serviceNameStartWithI, packageName, "OITM");
     }
     private void generateByTables(boolean serviceNameStartWithI, String packageName, String... tableNames) {
         GlobalConfig config = new GlobalConfig();
@@ -67,6 +67,7 @@ public class CodeGenerator {
                                 .setParent(packageName)
                                 .setController("controller")
                                 .setEntity("domain.entity")
+                                .setMapper("domain.mapper")
                 ).execute();
     }
     private void generateByTables(String packageName, String... tableNames) {

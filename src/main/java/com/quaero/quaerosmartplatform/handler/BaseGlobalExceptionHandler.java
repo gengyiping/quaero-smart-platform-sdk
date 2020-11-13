@@ -3,9 +3,9 @@ package com.quaero.quaerosmartplatform.handler;
 
 import com.quaero.quaerosmartplatform.domain.bo.ParameterInvalidItem;
 import com.quaero.quaerosmartplatform.domain.enumeration.ResultCode;
+import com.quaero.quaerosmartplatform.domain.result.DefaultErrorResult;
 import com.quaero.quaerosmartplatform.exceptions.BusinessException;
 import com.quaero.quaerosmartplatform.helper.ParameterInvalidItemHelper;
-import com.quaero.quaerosmartplatform.result.DefaultErrorResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

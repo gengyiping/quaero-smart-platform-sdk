@@ -12,7 +12,7 @@ import java.util.List;
 public enum ResultCode {
 
 	/* 成功状态码 */
-	SUCCESS(1, "成功"),
+	SUCCESS(200, "成功"),
 
 	/* 参数错误：10001-19999 */
 	PARAM_IS_INVALID(10001, "参数无效"),
@@ -20,13 +20,13 @@ public enum ResultCode {
 	PARAM_TYPE_BIND_ERROR(10003, "参数类型错误"),
 	PARAM_NOT_COMPLETE(10004, "参数缺失"),
 
-	/* 用户错误：20001-29999*/
-	USER_NOT_LOGGED_IN(20001, "用户未登录"),
-	USER_LOGIN_ERROR(20002, "账号不存在或密码错误"),
-	USER_ACCOUNT_FORBIDDEN(20003, "账号已被禁用"),
-	USER_NOT_EXIST(20004, "用户不存在"),
-	USER_HAS_EXISTED(20005, "用户已存在"),
-	LOGIN_CREDENTIAL_EXISTED(20006, "凭证已存在"),
+	/* 用户错误：400-499*/
+	USER_NOT_LOGGED_IN(403, "用户未登录"),
+	PERMISSION_NO_ACCESS(403, "无访问权限"),
+	USER_LOGIN_ERROR(401, "账号不存在或密码错误"),
+	USER_ACCOUNT_FORBIDDEN(401, "账号已被禁用"),
+	USER_NOT_EXIST(401, "用户不存在"),
+	LOGIN_FAILED(401, "登录失败"),
 
 	/* 业务错误：30001-39999 */
 	SPECIFIED_QUESTIONED_USER_NOT_EXIST(30001, "业务错误"),
@@ -45,12 +45,7 @@ public enum ResultCode {
 	INTERFACE_FORBID_VISIT(60003, "该接口禁止访问"),
 	INTERFACE_ADDRESS_INVALID(60004, "接口地址无效"),
 	INTERFACE_REQUEST_TIMEOUT(60005, "接口请求超时"),
-	INTERFACE_EXCEED_LOAD(60006, "接口负载过高"),
-
-	/* 权限错误：70001-79999 */
-	PERMISSION_NO_ACCESS(70001, "无访问权限"),
-	RESOURCE_EXISTED(70002, "资源已存在"),
-	RESOURCE_NOT_EXISTED(70003, "资源不存在");
+	INTERFACE_EXCEED_LOAD(60006, "接口负载过高");
 
 	private Integer code;
 

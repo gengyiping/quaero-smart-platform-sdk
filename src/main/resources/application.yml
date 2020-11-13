@@ -46,7 +46,16 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     auto-mapping-behavior: full
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  mapper-locations: classpath*:mapper/**/*Mapper.xml
+    default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler
+  mapper-locations: classpath*:mapper/*Mapper.xml
   type-aliases-package: com.quaero.quaerosmartplatform.domain.entity
+  typeEnumsPackage: com.quaero.quaerosmartplatform.domain.enumeration
+# swagger配置
+swagger:
+  # 是否开启swagger
+  enabled: true
+  # 全局统一鉴权配置
+  authorization:
+    key-name: GitsSessionID
 logging:
   config: classpath:log4j2.xml

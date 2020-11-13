@@ -32,12 +32,12 @@ public enum BusinessExceptionEnum {
 	CONFLICT(DataConflictException.class, HttpStatus.CONFLICT, ResultCode.DATA_ALREADY_EXISTED),
 
 	/**
-	 * 用户未登录
+	 * 用户未登录 401
 	 */
 	UNAUTHORIZED(UserNotLoginException.class, HttpStatus.UNAUTHORIZED, ResultCode.USER_NOT_LOGGED_IN),
 
 	/**
-	 * 无访问权限
+	 * 无访问权限 403
 	 */
 	FORBIDDEN(PermissionForbiddenException.class, HttpStatus.FORBIDDEN, ResultCode.PERMISSION_NO_ACCESS),
 
