@@ -1,15 +1,19 @@
 package com.quaero.quaerosmartplatform.domain.entity;
 
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
-import java.util.Date;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.quaero.quaerosmartplatform.domain.enumeration.IntegrityMarkEnum;
 import com.quaero.quaerosmartplatform.domain.enumeration.ValidityIndicatorEnum;
-import lombok.*;
-import lombok.experimental.Accessors;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * <p>
@@ -27,6 +31,8 @@ import lombok.experimental.Accessors;
 public class MaterialFlow implements Serializable {
 
     private static final long serialVersionUID=1L;
+    @TableId(value = "U_ID", type = IdType.AUTO)
+    private Long uId;
     //物料条码	条码组成（料号/批号）
     @TableField("U_BarCode")
     private String uBarcode;
@@ -36,6 +42,15 @@ public class MaterialFlow implements Serializable {
     //批号
     @TableField("U_DisNum")
     private String uDisnum;
+    //行号
+    @TableField("U_BaseLine")
+    private String uBaseline;
+    //单据类型	jxpda002 entity
+    @TableField("U_DocType")
+    private String uDoctype;
+    //来源单号
+    @TableField("U_BaseEntry")
+    private String uBaseentry;
     //固定位置编码	唯一可识别
     @TableField("U_GDWZ")
     private String uGdwz;
@@ -45,12 +60,6 @@ public class MaterialFlow implements Serializable {
     //完整性标识	0:清空  1:部分，该位置只有部分    2:完整，只有当前位置存放
     @TableField("U_WZBS")
     private IntegrityMarkEnum uWzbs;
-    //单据类型	jxpda002 entity
-    @TableField("U_DocType")
-    private String uDoctype;
-    //来源单号
-    @TableField("U_BaseEntry")
-    private String uBaseentry;
     //供应商代号
     @TableField("U_CardCode")
     private String uCardcode;

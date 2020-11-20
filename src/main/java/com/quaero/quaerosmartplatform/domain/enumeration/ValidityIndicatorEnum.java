@@ -16,7 +16,9 @@ public enum ValidityIndicatorEnum implements IEnum<String> {
     /**
      * 无效
      */
-    INVALID("N","无效");
+    INVALID("N","无效"),
+
+    NO("NO","无效");
 
     private String value;
     private String desc;

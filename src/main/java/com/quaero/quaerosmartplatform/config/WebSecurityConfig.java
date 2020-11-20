@@ -25,11 +25,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * spring-security配置
@@ -77,6 +78,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     PrintWriter out = response.getWriter();
                     try {
                         UserDetails details = userDetailsService.loadUserByUsername(authentication.getName());
+                        if (details == null) {
+                            out.write(objectMapper.writeValueAsString(PlatformResult.failure(ResultCode.LOGIN_FAILED)));
+                        }
                         String token = JwtTokenUtils.TOKEN_PREFIX + JwtTokenUtils.createToken(details, false);
                         // 重定向
                         response.setHeader(JwtTokenUtils.TOKEN_HEADER, token);
@@ -129,11 +133,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().cacheControl();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);  //基于token，不需要sessio
         //开启跨域访问
-        http.cors().disable();
+        http.cors().configurationSource(corsConfigurationSource());
         //开启模拟请求，比如API POST测试工具的测试，不开启时，API POST为报403错误
         http.csrf().disable();
         // 添加JWT filter
         http.addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    //跨域配置
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("*");    //同源配置，*表示任何请求都视为同源，若需指定ip和端口可以改为如“localhost：8080”，多个以“，”分隔；
+        corsConfiguration.addAllowedHeader("*");//header，允许哪些header，本案中使用的是token，此处可将*替换为token；
+        corsConfiguration.addAllowedMethod("*");    //允许的请求方法，PSOT、GET等
+        ((UrlBasedCorsConfigurationSource) source).registerCorsConfiguration("/**", corsConfiguration); //配置允许跨域访问的url
+        return source;
     }
 
     @Override

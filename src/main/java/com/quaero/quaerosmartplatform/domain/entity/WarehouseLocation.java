@@ -1,11 +1,19 @@
 package com.quaero.quaerosmartplatform.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.quaero.quaerosmartplatform.domain.enumeration.IntegrityMarkEnum;
+import com.quaero.quaerosmartplatform.domain.enumeration.ValidityIndicatorEnum;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import lombok.*;
-import lombok.experimental.Accessors;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * <p>
@@ -19,28 +27,42 @@ import lombok.experimental.Accessors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("[dbo].[@JX_KWSJ]")
+@TableName("[dbo].[@JX_PDA007]")
 public class WarehouseLocation implements Serializable {
 
     private static final long serialVersionUID=1L;
+    //id
+    @TableId(value = "U_ID", type = IdType.AUTO)
+    private Long uId;
     //料号
-    @TableField("ItemCode")
+    @TableField("U_ItemCode")
     private String ItemCode;
     //仓库
-    @TableField("WhsCode")
+    @TableField("U_WhsCode")
     private String WhsCode;
-    //库位
-    @TableField("KW")
-    private String kw;
     //批号
-    @TableField("DisNum")
+    @TableField("U_DisNum")
     private String DisNum;
     //有效性标识	Y:有效  N：无效 N0：无效（上了PDA可能不用N0状态）
-    @TableField("Active")
-    private String Active;
+    @TableField("U_Active")
+    private ValidityIndicatorEnum Active;
+    //固定位置
+    @TableField("U_GDWZ")
+    private String uGdwz;
+    //移动位置
+    @TableField("U_YDWZ")
+    private String uYdwz;
+    //完整性标识	0:清空  1:部分，该位置只有部分    2:完整，只有当前位置存放
+    @TableField("U_WZBS")
+    private IntegrityMarkEnum uWzbs;
+    //数量	预留，暂不不管数量，只管有和无
+    @TableField("U_QTY")
+    private BigDecimal uQty;
 
-    @TableField("NewKW")
-    private String NewKW;
+    @TableField("U_Creator")
+    private String uCreator;
 
+    @TableField("U_DocDate")
+    private Date uDocdate;
 
 }

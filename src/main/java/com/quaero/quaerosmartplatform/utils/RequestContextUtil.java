@@ -15,8 +15,8 @@ import javax.servlet.http.HttpSession;
 /**
  * @desc 应用级对象获取工具类
  *
- * @author zhumaer
- * @since 9/18/2017 3:00 PM
+ * @author wuhanzhang
+ * @since 2020/11/14
  */
 public class RequestContextUtil implements ApplicationContextAware {
 

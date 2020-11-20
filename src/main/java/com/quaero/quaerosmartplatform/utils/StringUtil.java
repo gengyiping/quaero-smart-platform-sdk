@@ -3,8 +3,8 @@ package com.quaero.quaerosmartplatform.utils;
 /**
  * @desc 字符串操作工具类
  * 
- * @author zhumaer
- * @since 6/20/2017 16:37 PM
+ * @author wuhanzhang
+ * @since 2020/11/14 PM
  */
 public class StringUtil {
 

@@ -19,7 +19,7 @@ public enum BusinessExceptionEnum {
 	/**
 	 * 数据未找到
 	 */
-	NOT_FOUND(DataNotFoundException.class, HttpStatus.NOT_FOUND, ResultCode.RESULE_DATA_NONE),
+	NOT_FOUND(DataNotFoundException.class, HttpStatus.NOT_FOUND, ResultCode.RESULT_DATA_NONE),
 
 	/**
 	 * 接口方法不允许

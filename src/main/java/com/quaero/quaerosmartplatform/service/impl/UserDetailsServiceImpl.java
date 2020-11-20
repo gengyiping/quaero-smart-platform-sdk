@@ -3,8 +3,6 @@ package com.quaero.quaerosmartplatform.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.quaero.quaerosmartplatform.domain.bo.SecurityUserDetails;
 import com.quaero.quaerosmartplatform.domain.entity.User;
-import com.quaero.quaerosmartplatform.domain.entity.UserAuthority;
-import com.quaero.quaerosmartplatform.exceptions.DataNotFoundException;
 import com.quaero.quaerosmartplatform.service.AuthorityService;
 import com.quaero.quaerosmartplatform.service.UserAuthorityService;
 import com.quaero.quaerosmartplatform.service.UserService;
@@ -15,13 +13,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
 /**
  * 获取用户相关信息
@@ -56,7 +51,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             //List<Authority> menus=authorityService.getRoleMenuByRoles(roles);
             return new SecurityUserDetails(user,authorities);
         } else {
-            throw new UsernameNotFoundException("用户不存在");
+            return null;
         }
     }
 }
