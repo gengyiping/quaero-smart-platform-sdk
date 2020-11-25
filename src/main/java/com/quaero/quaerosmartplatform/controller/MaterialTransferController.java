@@ -250,13 +250,13 @@ public class MaterialTransferController {
     }
 
     @PostMapping("/stockBatch")
-    @ApiOperation("确认批转移物料接口 未完成")
+    @ApiOperation("确认库存批转移物料接口")
     public void confirmStockBatch(@RequestBody MaterialTransferBatchUpdateDto dto) {
         warehouseLocationService.confirmStockMaterialBatchTransfer(dto);
     }
 
     @PostMapping("/nonStockBatch")
-    @ApiOperation("确认批转移物料接口 未完成")
+    @ApiOperation("确认非库存批转移物料接口")
     public void confirmNonStockBatch(@RequestBody MaterialTransferBatchUpdateDto dto) {
         materialFlowService.confirmNonStockMaterialBatchTransfer(dto);
     }

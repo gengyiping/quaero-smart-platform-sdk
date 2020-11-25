@@ -1,5 +1,6 @@
 package com.quaero.quaerosmartplatform.utils;
 
+import com.alibaba.fastjson.JSONArray;
 import com.quaero.quaerosmartplatform.domain.bo.SecurityUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @since wuhanzhang
@@ -25,15 +27,11 @@ public class JwtTokenUtils {
     // 角色的key
     private static final String ROLE_CLAIMS = "rol";
 
-    // 过期时间是3600秒，既是1个小时
-    private static final long EXPIRATION = 3600L;
-
-    // 选择了记住我之后的过期时间为7天
-    private static final long EXPIRATION_REMEMBER = 604800L;
+    // 过期时间是3600秒，既是1个小时 *24h
+    private static final long EXPIRATION = 3600L*24;
 
     // 创建token
-    public static String createToken(UserDetails userDetails, boolean isRememberMe) {
-        long expiration = isRememberMe ? EXPIRATION_REMEMBER : EXPIRATION;
+    public static String createToken(UserDetails userDetails) {
         HashMap<String, Object> map = new HashMap<>();
         map.put(ROLE_CLAIMS, userDetails.getAuthorities());
         return Jwts.builder()
@@ -42,7 +40,7 @@ public class JwtTokenUtils {
                 .setIssuer(ISS)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION * 1000))
                 .compact();
     }
 
@@ -52,8 +50,8 @@ public class JwtTokenUtils {
     }
 
     // 获取用户角色
-    public static String getUserRole(String token){
-        return (String) getTokenBody(token).get(ROLE_CLAIMS);
+    public static List<String> getUserRole(String token){
+        return JSONArray.parseArray(JSONArray.toJSONString(getTokenBody(token).get(ROLE_CLAIMS)), String.class);
     }
 
     // 是否已过期

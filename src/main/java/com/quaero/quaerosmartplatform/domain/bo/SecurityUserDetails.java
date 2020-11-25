@@ -33,13 +33,14 @@ public class SecurityUserDetails extends User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return super.getName();
+        return super.getCode();
     }
 
     public SecurityUserDetails(User user, Collection<? extends GrantedAuthority> authorities){
         this.authorities = authorities;
         this.setName(user.getName());
         this.setUPassword(user.getUPassword());
+        this.setCode(user.getCode());
         //String encode = new BCryptPasswordEncoder().encode("123456");
         this.setAuthorities(authorities);
     }

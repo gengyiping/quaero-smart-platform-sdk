@@ -1,12 +1,15 @@
 package com.quaero.quaerosmartplatform.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.quaero.quaerosmartplatform.domain.enumeration.ValidityIndicatorEnum;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import lombok.*;
-import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 /**
  * <p>
@@ -37,7 +40,8 @@ public class UserAuthority implements Serializable {
     @TableField("LogInst")
     private Integer LogInst;
 
-    private String uCk;
+    @TableField("U_CK")
+    private ValidityIndicatorEnum uCk;
 
     @TableField("U_Code")
     private String uCode;

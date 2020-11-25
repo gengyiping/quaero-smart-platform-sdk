@@ -13,4 +13,5 @@ import com.quaero.quaerosmartplatform.domain.entity.User;
  */
 public interface UserService extends IService<User> {
 
+    User getCurrentUser();
 }

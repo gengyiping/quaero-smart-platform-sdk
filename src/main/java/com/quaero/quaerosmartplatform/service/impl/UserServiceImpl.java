@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.quaero.quaerosmartplatform.domain.entity.User;
 import com.quaero.quaerosmartplatform.domain.mapper.UserMapper;
 import com.quaero.quaerosmartplatform.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,4 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
+    @Override
+    public User getCurrentUser() {
+        return baseMapper.selectById(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
 }

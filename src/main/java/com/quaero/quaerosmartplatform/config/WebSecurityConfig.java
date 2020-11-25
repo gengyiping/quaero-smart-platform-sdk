@@ -77,14 +77,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     response.setStatus(HttpServletResponse.SC_OK);
                     PrintWriter out = response.getWriter();
                     try {
-                        UserDetails details = userDetailsService.loadUserByUsername(authentication.getName());
+                        // 查看源代码会发现调用getPrincipal()方法会返回一个实现了`UserDetails`接口的对象
+                        UserDetails details = (UserDetails)authentication.getPrincipal();
                         if (details == null) {
                             out.write(objectMapper.writeValueAsString(PlatformResult.failure(ResultCode.LOGIN_FAILED)));
+                        }else {
+                            String token = JwtTokenUtils.TOKEN_PREFIX + JwtTokenUtils.createToken(details);
+                            // 重定向
+                            response.setHeader(JwtTokenUtils.TOKEN_HEADER, token);
+                            out.write(objectMapper.writeValueAsString(PlatformResult.success(token)));
                         }
-                        String token = JwtTokenUtils.TOKEN_PREFIX + JwtTokenUtils.createToken(details, false);
-                        // 重定向
-                        response.setHeader(JwtTokenUtils.TOKEN_HEADER, token);
-                        out.write(objectMapper.writeValueAsString(PlatformResult.success(token)));
                     } catch (Exception e) {
                         out.write(objectMapper.writeValueAsString(PlatformResult.failure(ResultCode.LOGIN_FAILED)));
                     } finally {
@@ -92,6 +94,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         out.close();
                     }
                 })
+                //登录失败
                 .failureHandler((request, response, ex) -> {
                     response.setContentType("application/json;charset=utf-8");
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -137,7 +140,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //开启模拟请求，比如API POST测试工具的测试，不开启时，API POST为报403错误
         http.csrf().disable();
         // 添加JWT filter
-        http.addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JWTAuthorizationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
     }
 
     //跨域配置
