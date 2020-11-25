@@ -78,10 +78,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     PrintWriter out = response.getWriter();
                     try {
                         // 查看源代码会发现调用getPrincipal()方法会返回一个实现了`UserDetails`接口的对象
-                        UserDetails details = (UserDetails)authentication.getPrincipal();
+                        UserDetails details = (UserDetails) authentication.getPrincipal();
                         if (details == null) {
                             out.write(objectMapper.writeValueAsString(PlatformResult.failure(ResultCode.LOGIN_FAILED)));
-                        }else {
+                        } else {
                             String token = JwtTokenUtils.TOKEN_PREFIX + JwtTokenUtils.createToken(details);
                             // 重定向
                             response.setHeader(JwtTokenUtils.TOKEN_HEADER, token);
@@ -165,7 +165,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/css/**")
                 .antMatchers("/images/**")
                 .antMatchers("/js/**")
-                .antMatchers("/layui/**");
+                .antMatchers("/layui/**")
+                .antMatchers("/druid/**");
     }
 
     private PasswordEncoder passwordEncoder() {

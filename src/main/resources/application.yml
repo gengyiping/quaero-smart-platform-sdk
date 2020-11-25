@@ -31,17 +31,13 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto
-      field-strategy: not_empty
       #驼峰下划线转换
-      column-underline: true
+      table-underline: true
       #逻辑删除配置
       logic-delete-value: 0
       logic-not-delete-value: 1
-      db-type: mssql
-    refresh: false
-    configuration:
-      map-underscore-to-camel-case: true
-      cache-enabled: false
+      select-strategy: not_empty
+      update-strategy: not_empty
   configuration:
     map-underscore-to-camel-case: true
     auto-mapping-behavior: full
