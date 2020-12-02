@@ -22,6 +22,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +44,7 @@ import java.util.List;
 @RestController
 @ResponseResult
 @Api(tags = "物料转移相关接口")
+@PreAuthorize("hasAuthority('AAA')")
 @RequestMapping("/api/materialTransfer")
 public class MaterialTransferController {
 
@@ -68,7 +70,7 @@ public class MaterialTransferController {
         List<MaterialTransferInfo> infos = new ArrayList<>();
         List<WarehouseLocation> list = warehouseLocationService.lambdaQuery()
                 .like(StringUtil.isNotEmpty(dto.getItemCode()), WarehouseLocation::getItemCode, dto.getItemCode())
-                .like(StringUtil.isNotEmpty(dto.getDisNum()) && !dto.getDisNum().equals("XXXX"), WarehouseLocation::getDisNum, dto.getDisNum())
+                .like(StringUtil.isNotEmpty(dto.getDisNum()) && !dto.getDisNum().equals("****"), WarehouseLocation::getDisNum, dto.getDisNum())
                 .eq(WarehouseLocation::getActive, ValidityIndicatorEnum.VALID)
                 .list();
         if (list.size() <= 0) {

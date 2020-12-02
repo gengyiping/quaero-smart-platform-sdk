@@ -1,6 +1,5 @@
 package com.quaero.quaerosmartplatform.utils;
 
-import com.alibaba.fastjson.JSONArray;
 import com.quaero.quaerosmartplatform.domain.bo.SecurityUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -8,9 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @since wuhanzhang
@@ -25,7 +22,10 @@ public class JwtTokenUtils {
     private static final String ISS = "wu";
 
     // 角色的key
-    private static final String ROLE_CLAIMS = "rol";
+    private static final String ROLE_CLAIMS = "role";
+
+    // 权限的key
+    private static final String AUTHORITY_CLAIMS = "authority";
 
     // 过期时间是3600秒，既是1个小时 *24h
     private static final long EXPIRATION = 3600L*24;
@@ -33,7 +33,7 @@ public class JwtTokenUtils {
     // 创建token
     public static String createToken(UserDetails userDetails) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put(ROLE_CLAIMS, userDetails.getAuthorities());
+        map.put(AUTHORITY_CLAIMS, userDetails.getAuthorities());
         return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .setClaims(map)
@@ -50,8 +50,21 @@ public class JwtTokenUtils {
     }
 
     // 获取用户角色
-    public static List<String> getUserRole(String token){
-        return JSONArray.parseArray(JSONArray.toJSONString(getTokenBody(token).get(ROLE_CLAIMS)), String.class);
+    public static String getUserRole(String token){
+        //return JSONArray.parseArray(JSONArray.toJSONString(getTokenBody(token).get(AUTHORITY_CLAIMS)), String.class);
+        return getTokenBody(token).get(ROLE_CLAIMS).toString();
+    }
+
+    // 获取用户权限
+    public static List<String> getUserAuthority(String token){
+        List<String> list = new ArrayList<>();
+        List<LinkedHashMap<String,String>> hashMapList = (List<LinkedHashMap<String, String>>) getTokenBody(token).get(AUTHORITY_CLAIMS);
+        hashMapList.forEach(s->{
+            for (Map.Entry<String, String> entry : s.entrySet()) {
+                list.add(entry.getValue());
+            }
+        });
+        return list;
     }
 
     // 是否已过期

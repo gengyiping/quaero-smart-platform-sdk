@@ -51,7 +51,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // 填充权限
         Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
         for (UserAuthority userAuthority : userAuthorities) {
-            authorities.add(new SimpleGrantedAuthority(userAuthority.getCode()));
+            authorities.add(new SimpleGrantedAuthority(userAuthority.getUName()));
         }
         //填充权限菜单
         //List<Authority> menus=authorityService.getRoleMenuByRoles(roles);

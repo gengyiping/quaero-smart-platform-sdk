@@ -9,9 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.*;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,7 +28,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
 /**
@@ -47,6 +45,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -55,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //未登录
                 .authenticationEntryPoint((request, response, authException) -> {
                     response.setContentType("application/json;charset=utf-8");
-                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    response.setStatus(HttpStatus.FORBIDDEN.value());
                     PrintWriter out = response.getWriter();
                     out.write(objectMapper.writeValueAsString(PlatformResult.failure(ResultCode.USER_NOT_LOGGED_IN)));
                     out.flush();
@@ -66,6 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/login").permitAll()
                 .antMatchers("/api/logout").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
+                //.antMatchers("/api/materialTransfer/stockInquire").hasRole("AAA")
                 .anyRequest().authenticated() //必须授权才能范围
                 .and()
                 .formLogin()
@@ -74,7 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/api/login")  //登录POST请求路径
                 .successHandler((request, response, authentication) -> {
                     response.setContentType("application/json;charset=utf-8");
-                    response.setStatus(HttpServletResponse.SC_OK);
+                    response.setStatus(HttpStatus.OK.value());
                     PrintWriter out = response.getWriter();
                     try {
                         // 查看源代码会发现调用getPrincipal()方法会返回一个实现了`UserDetails`接口的对象
@@ -97,26 +102,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //登录失败
                 .failureHandler((request, response, ex) -> {
                     response.setContentType("application/json;charset=utf-8");
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     PrintWriter out = response.getWriter();
+                    PlatformResult platformResult = new PlatformResult();
+                    platformResult.setCode(401);
                     if (ex instanceof UsernameNotFoundException || ex instanceof BadCredentialsException) {
-                        out.write(objectMapper.writeValueAsString(PlatformResult.failure(ResultCode.USER_LOGIN_ERROR)));
+                        platformResult.setMsg("账号不存在或密码错误");
+                        //out.write(objectMapper.writeValueAsString(PlatformResult.failure(ResultCode.USER_LOGIN_ERROR)));
                     } else if (ex instanceof DisabledException) {
-                        out.write(objectMapper.writeValueAsString(PlatformResult.failure(ResultCode.USER_ACCOUNT_FORBIDDEN)));
+                        platformResult.setMsg("账号已被禁用，请联系管理员!");
+                        //out.write(objectMapper.writeValueAsString(PlatformResult.failure(ResultCode.USER_ACCOUNT_FORBIDDEN)));
+                    } else if (ex instanceof LockedException) {
+                        platformResult.setMsg("账户被锁定，请联系管理员!");
+                    } else if (ex instanceof CredentialsExpiredException) {
+                        platformResult.setMsg("密码过期，请联系管理员!");
+                    } else if (ex instanceof AccountExpiredException) {
+                        platformResult.setMsg("账户过期，请联系管理员!");
                     } else {
-                        out.write(objectMapper.writeValueAsString(PlatformResult.failure(ResultCode.LOGIN_FAILED)));
+                        platformResult.setMsg("登录失败!");
+                        //out.write(objectMapper.writeValueAsString(PlatformResult.failure(ResultCode.LOGIN_FAILED)));
                     }
-                    out.flush();
-                    out.close();
-                })
-                .and()
-                .exceptionHandling()
-                //没有权限，返回json
-                .accessDeniedHandler((request, response, ex) -> {
-                    response.setContentType("application/json;charset=utf-8");
-                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                    PrintWriter out = response.getWriter();
-                    out.write(objectMapper.writeValueAsString(PlatformResult.failure(ResultCode.PERMISSION_NO_ACCESS)));
+                    out.write(objectMapper.writeValueAsString(platformResult));
                     out.flush();
                     out.close();
                 })
@@ -126,6 +132,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //退出成功，返回json
                 .logoutSuccessHandler((request, response, authentication) -> {
                     response.setContentType("application/json;charset=utf-8");
+                    response.setStatus(HttpStatus.OK.value());
                     PrintWriter out = response.getWriter();
                     out.write(objectMapper.writeValueAsString(PlatformResult.success("退出成功")));
                     out.flush();
@@ -140,7 +147,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //开启模拟请求，比如API POST测试工具的测试，不开启时，API POST为报403错误
         http.csrf().disable();
         // 添加JWT filter
-        http.addFilterBefore(new JWTAuthorizationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JWTAuthorizationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling()
+                //没有权限，返回json
+                .accessDeniedHandler((request, response, ex) -> {
+                    response.setContentType("application/json;charset=utf-8");
+                    response.setStatus(HttpStatus.FORBIDDEN.value());
+                    PrintWriter out = response.getWriter();
+                    out.write(objectMapper.writeValueAsString(PlatformResult.failure(ResultCode.PERMISSION_NO_ACCESS)));
+                    out.flush();
+                    out.close();
+                });
     }
 
     //跨域配置

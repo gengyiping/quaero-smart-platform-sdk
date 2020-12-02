@@ -5,6 +5,7 @@ import com.quaero.quaerosmartplatform.exceptions.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -52,6 +53,13 @@ public class GlobalExceptionHandler extends BaseGlobalExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public DefaultErrorResult handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request) {
 		return super.handleMethodArgumentNotValidException(e, request);
+	}
+
+	@Override
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(AccessDeniedException.class)
+	public DefaultErrorResult handleNoAccessException(AccessDeniedException e, HttpServletRequest request) {
+		return super.handleNoAccessException(e, request);
 	}
 
 	/** 处理自定义异常 */

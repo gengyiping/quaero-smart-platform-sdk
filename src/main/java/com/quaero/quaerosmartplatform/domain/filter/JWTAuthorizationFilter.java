@@ -1,6 +1,7 @@
 package com.quaero.quaerosmartplatform.domain.filter;
 
 
+import com.quaero.quaerosmartplatform.exceptions.BusinessException;
 import com.quaero.quaerosmartplatform.utils.JwtTokenUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,7 +32,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain chain) throws IOException, ServletException {
+                                    FilterChain chain) throws IOException, ServletException, BusinessException {
 
         String token = request.getHeader(JwtTokenUtils.TOKEN_HEADER);
         // 如果请求头中没有Authorization信息则直接放行了
@@ -53,12 +54,15 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     private UsernamePasswordAuthenticationToken getAuthentication(String tokenHeader) {
         //解析Token时将“Bearer ”前缀去掉
         String token = tokenHeader.replace(JwtTokenUtils.TOKEN_PREFIX, "");
-        String username = JwtTokenUtils.getUsername(token);
-        List<String> roles = JwtTokenUtils.getUserRole(token);
-        Collection<GrantedAuthority> authorities = new HashSet<>();
-        if (roles!=null) {
-            roles.forEach(r->authorities.add(new SimpleGrantedAuthority(r)));
+        if (JwtTokenUtils.isExpiration(token)){
+            return null;
+            //throw new BusinessException(ResultCode.TOKEN_EXPIRATION);
         }
+        String username = JwtTokenUtils.getUsername(token);
+        List<String> roles = JwtTokenUtils.getUserAuthority(token);
+        Collection<GrantedAuthority> authorities = new HashSet<>();
+        roles.forEach(r->authorities.add(new SimpleGrantedAuthority(r)));
+
         if (username != null){
             return new UsernamePasswordAuthenticationToken(username, null, authorities);
         }

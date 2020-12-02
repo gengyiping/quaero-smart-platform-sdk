@@ -22,6 +22,7 @@ public enum ResultCode {
 
 	/* 用户错误*/
 	USER_NOT_LOGGED_IN(403, "用户未登录"),
+	TOKEN_EXPIRATION(403, "用户Token过期"),
 	PERMISSION_NO_ACCESS(401, "无访问权限"),
 	USER_LOGIN_ERROR(401, "账号不存在或密码错误"),
 	USER_ACCOUNT_FORBIDDEN(401, "账号已被禁用"),
