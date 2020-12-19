@@ -22,7 +22,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +43,7 @@ import java.util.List;
 @RestController
 @ResponseResult
 @Api(tags = "物料转移相关接口")
-@PreAuthorize("hasAuthority('AAA')")
+//@PreAuthorize("hasAuthority('AAA')")
 @RequestMapping("/api/materialTransfer")
 public class MaterialTransferController {
 
@@ -190,6 +189,9 @@ public class MaterialTransferController {
         List<WarehouseLocation> list = warehouseLocationService.lambdaQuery()
                 .eq(WarehouseLocation::getUYdwz, dto.getLocation())
                 .eq(WarehouseLocation::getActive, ValidityIndicatorEnum.VALID).list();
+        if (list.size() <= 0) {
+            throw new BusinessException(ResultCode.RESULT_DATA_NONE);
+        }
         MaterialTransferBatchInfo info = new MaterialTransferBatchInfo();
         if (list.size() > 0) {
             info.setDisTotal(list.size());
@@ -218,6 +220,9 @@ public class MaterialTransferController {
         List<MaterialFlow> list = materialFlowService.lambdaQuery()
                 .eq(MaterialFlow::getUYdwz, dto.getLocation())
                 .eq(MaterialFlow::getUActive, ValidityIndicatorEnum.VALID).list();
+        if (list.size() <= 0) {
+            throw new BusinessException(ResultCode.RESULT_DATA_NONE);
+        }
         MaterialTransferBatchInfo info = new MaterialTransferBatchInfo();
         if (list.size() > 0) {
             info.setDisTotal(list.size());

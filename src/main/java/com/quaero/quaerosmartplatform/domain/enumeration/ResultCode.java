@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @desc API 统一返回状态码
- * 
- * @author zhumaer
- * @since 8/31/2017 3:00 PM
+ * <p>
+ * API 统一返回状态码
+ * </p>
+ *
+ * @author wuhanzhang@
+ * @since 2020-11-03
  */
 public enum ResultCode {
 

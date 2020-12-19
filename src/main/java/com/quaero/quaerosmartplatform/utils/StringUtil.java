@@ -118,4 +118,13 @@ public class StringUtil {
 		format = replace(format, replaceOperator, "%s");
 		return formatIfArgs(format, args);
 	}
+
+	public static String codeAddOne(String code, int len){
+		int i = Integer.parseInt(code);
+		StringBuilder strHao = new StringBuilder(Integer.toString(i));
+		while (strHao.length() < len) {
+			strHao.insert(0, "0");
+		}
+		return strHao.toString();
+	}
 }

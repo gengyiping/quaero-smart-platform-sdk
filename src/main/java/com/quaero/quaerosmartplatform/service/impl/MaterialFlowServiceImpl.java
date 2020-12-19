@@ -57,11 +57,17 @@ public class MaterialFlowServiceImpl extends ServiceImpl<MaterialFlowMapper, Mat
     public void confirmNonStockMaterialTransfer(MaterialTransferNonStockUpdateDto dto) {
         //发货单第一笔存数据库
         if (dto.getDoctype().equals(DocTypeEnum.SHIP_FORM.getValue()) && StringUtil.isEmpty(dto.getUIds())) {
+            String barcode = dto.getItemCode() +
+                    (dto.getDisNum().length() >= 4 ? dto.getDisNum().substring(dto.getDisNum().length() - 4) : dto.getDisNum()) +
+                    dto.getDoctype() +
+                    StringUtil.codeAddOne(dto.getBaseEntry(), 6) +
+                    StringUtil.codeAddOne(dto.getBaseline(), 3);
             baseMapper.insert(MaterialFlow.builder()
                     .uActive(ValidityIndicatorEnum.VALID)
-                    .uBarcode(dto.getItemCode() + dto.getDisNum())
+                    .uBarcode(barcode)
                     .uItemcode(dto.getItemCode())
                     .uDisnum(dto.getDisNum())
+                    .uDoctype(dto.getDoctype())
                     .uGdwz(dto.getTLocation().startsWith(Constants.KW_PREFIX) ? null : dto.getTLocation())
                     .uYdwz(dto.getTLocation().startsWith(Constants.KW_PREFIX) ? dto.getTLocation() : null)
                     .uWzbs(dto.isWzbs() ? IntegrityMarkEnum.ALL : IntegrityMarkEnum.SECTION)
@@ -89,13 +95,14 @@ public class MaterialFlowServiceImpl extends ServiceImpl<MaterialFlowMapper, Mat
 
     /**
      * 非库存 批转移
+     *
      * @param dto
      */
     @Override
     public void confirmNonStockMaterialBatchTransfer(MaterialTransferBatchUpdateDto dto) {
         //非库存
         List<MaterialFlow> list = baseMapper.selectList(new QueryWrapper<>(MaterialFlow.builder()
-                        .uYdwz(dto.getLocation()).uActive(ValidityIndicatorEnum.VALID).build()));
+                .uYdwz(dto.getLocation()).uActive(ValidityIndicatorEnum.VALID).build()));
         list.forEach(m -> {
             doMaterialNonStock(m, true, m.getUQty(), dto.getTargetLocation());
         });
@@ -104,10 +111,10 @@ public class MaterialFlowServiceImpl extends ServiceImpl<MaterialFlowMapper, Mat
     /**
      * 非库存 转移动作
      *
-     * @param ol        原位置对象
-     * @param wzbs      完整标识
-     * @param qty       数量
-     * @param tl        目标位置
+     * @param ol   原位置对象
+     * @param wzbs 完整标识
+     * @param qty  数量
+     * @param tl   目标位置
      */
     private void doMaterialNonStock(MaterialFlow ol, boolean wzbs, BigDecimal qty, String tl) {
         if (qty.compareTo(ol.getUQty()) > 0)
