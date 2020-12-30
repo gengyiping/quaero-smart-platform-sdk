@@ -84,7 +84,7 @@ public class MaterialTransferController {
             info.setCreator(l.getUCreator());
             info.setDocDate(l.getUDocdate());
             info.setOl(StringUtil.isEmpty(l.getUYdwz()) ? l.getUGdwz() : l.getUYdwz());
-            info.setItemName(oitmService.getById(l.getItemCode()).getItemName());
+            info.setItemName(oitmService.getById(l.getItemCode()) == null ? null : oitmService.getById(l.getItemCode()).getItemName());
             infos.add(info);
         });
         return infos;
@@ -203,7 +203,8 @@ public class MaterialTransferController {
                             .uId(m.getUId())
                             .itemCode(m.getItemCode())
                             .disNum(m.getDisNum())
-                            .itemName(oitmService.getBaseMapper().selectById(m.getItemCode()).getItemName())
+                            .itemName(oitmService.getBaseMapper().selectById(m.getItemCode()) == null ?
+                                    null : oitmService.getBaseMapper().selectById(m.getItemCode()).getItemName())
                             .creator(m.getUCreator())
                             .docDate(m.getUDocdate())
                             .build())
@@ -234,7 +235,8 @@ public class MaterialTransferController {
                             .uId(m.getUId())
                             .itemCode(m.getUItemcode())
                             .disNum(m.getUDisnum())
-                            .itemName(oitmService.getBaseMapper().selectById(m.getUItemcode()).getItemName())
+                            .itemName(oitmService.getBaseMapper().selectById(m.getUItemcode()) == null ?
+                                            null : oitmService.getBaseMapper().selectById(m.getUItemcode()).getItemName())
                             .creator(m.getUCreator())
                             .docDate(m.getUDocdate())
                             .build())
