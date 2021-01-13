@@ -10,7 +10,7 @@ import com.quaero.quaerosmartplatform.domain.entity.MaterialFlow;
 import com.quaero.quaerosmartplatform.domain.entity.WarehouseLocation;
 import com.quaero.quaerosmartplatform.domain.enumeration.DocTypeEnum;
 import com.quaero.quaerosmartplatform.domain.enumeration.ResultCode;
-import com.quaero.quaerosmartplatform.domain.enumeration.ValidityIndicatorEnum;
+import com.quaero.quaerosmartplatform.domain.enumeration.ValidityEnum;
 import com.quaero.quaerosmartplatform.exceptions.BusinessException;
 import com.quaero.quaerosmartplatform.service.*;
 import com.quaero.quaerosmartplatform.utils.StringUtil;
@@ -70,7 +70,7 @@ public class MaterialTransferController {
         List<WarehouseLocation> list = warehouseLocationService.lambdaQuery()
                 .like(StringUtil.isNotEmpty(dto.getItemCode()), WarehouseLocation::getItemCode, dto.getItemCode())
                 .like(StringUtil.isNotEmpty(dto.getDisNum()) && !dto.getDisNum().equals("****"), WarehouseLocation::getDisNum, dto.getDisNum())
-                .eq(WarehouseLocation::getActive, ValidityIndicatorEnum.VALID)
+                .eq(WarehouseLocation::getActive, ValidityEnum.VALID)
                 .list();
         if (list.size() <= 0) {
             throw new BusinessException(ResultCode.RESULT_DATA_NONE);
@@ -105,7 +105,7 @@ public class MaterialTransferController {
                 .like(StringUtil.isNotEmpty(dto.getDoctype()), MaterialFlow::getUDoctype, dto.getDoctype())
                 .like(StringUtil.isNotEmpty(dto.getBaseEntry()), MaterialFlow::getUBaseentry, dto.getBaseEntry())
                 .like(StringUtil.isNotEmpty(dto.getBaseline()), MaterialFlow::getUBaseline, dto.getBaseline())
-                .eq(MaterialFlow::getUActive, ValidityIndicatorEnum.VALID)
+                .eq(MaterialFlow::getUActive, ValidityEnum.VALID)
                 .list();
         if (list.size() <= 0) {
             throw new BusinessException(ResultCode.RESULT_DATA_NONE);
@@ -188,7 +188,7 @@ public class MaterialTransferController {
         //库存怎么做
         List<WarehouseLocation> list = warehouseLocationService.lambdaQuery()
                 .eq(WarehouseLocation::getUYdwz, dto.getLocation())
-                .eq(WarehouseLocation::getActive, ValidityIndicatorEnum.VALID).list();
+                .eq(WarehouseLocation::getActive, ValidityEnum.VALID).list();
         if (list.size() <= 0) {
             throw new BusinessException(ResultCode.RESULT_DATA_NONE);
         }
@@ -220,7 +220,7 @@ public class MaterialTransferController {
         //非库存
         List<MaterialFlow> list = materialFlowService.lambdaQuery()
                 .eq(MaterialFlow::getUYdwz, dto.getLocation())
-                .eq(MaterialFlow::getUActive, ValidityIndicatorEnum.VALID).list();
+                .eq(MaterialFlow::getUActive, ValidityEnum.VALID).list();
         if (list.size() <= 0) {
             throw new BusinessException(ResultCode.RESULT_DATA_NONE);
         }

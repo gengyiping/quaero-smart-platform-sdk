@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.core.enums.IEnum;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * 有效性标识
+ * 有效性枚举
  * Y:有效；N：无效
  */
-public enum ValidityIndicatorEnum implements IEnum<String> {
+public enum ValidityEnum implements IEnum<String> {
 
     /**
      * 有效
@@ -23,7 +23,7 @@ public enum ValidityIndicatorEnum implements IEnum<String> {
     private String value;
     private String desc;
 
-    ValidityIndicatorEnum(final String value, final String desc) {
+    ValidityEnum(final String value, final String desc) {
         this.value = value;
         this.desc = desc;
     }

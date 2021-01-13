@@ -6,7 +6,7 @@ import com.quaero.quaerosmartplatform.domain.dto.MaterialTransferBatchUpdateDto;
 import com.quaero.quaerosmartplatform.domain.dto.MaterialTransferStockUpdateDto;
 import com.quaero.quaerosmartplatform.domain.entity.WarehouseLocation;
 import com.quaero.quaerosmartplatform.domain.enumeration.IntegrityMarkEnum;
-import com.quaero.quaerosmartplatform.domain.enumeration.ValidityIndicatorEnum;
+import com.quaero.quaerosmartplatform.domain.enumeration.ValidityEnum;
 import com.quaero.quaerosmartplatform.domain.mapper.WarehouseLocationMapper;
 import com.quaero.quaerosmartplatform.exceptions.BusinessException;
 import com.quaero.quaerosmartplatform.service.UserService;
@@ -67,7 +67,7 @@ public class WarehouseLocationServiceImpl extends ServiceImpl<WarehouseLocationM
     @Override
     public void confirmStockMaterialBatchTransfer(MaterialTransferBatchUpdateDto dto) {
         List<WarehouseLocation> list = baseMapper.selectList(new QueryWrapper<>(WarehouseLocation.builder()
-                .uYdwz(dto.getLocation()).Active(ValidityIndicatorEnum.VALID).build()));
+                .uYdwz(dto.getLocation()).Active(ValidityEnum.VALID).build()));
         list.forEach(warehouseLocation -> {
             doMaterialStock(warehouseLocation, true, warehouseLocation.getUQty(),dto.getTargetLocation());
         });
@@ -90,7 +90,7 @@ public class WarehouseLocationServiceImpl extends ServiceImpl<WarehouseLocationM
                 .WhsCode(ol.getWhsCode())
                 .uWzbs(wzbs ? IntegrityMarkEnum.ALL : IntegrityMarkEnum.SECTION)
                 .uQty(qty)
-                .Active(ValidityIndicatorEnum.VALID)
+                .Active(ValidityEnum.VALID)
                 .uCreator(userService.getCurrentUser().getName())
                 .uDocdate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
                 .build();
@@ -105,7 +105,7 @@ public class WarehouseLocationServiceImpl extends ServiceImpl<WarehouseLocationM
         baseMapper.insert(nl);
         //原位置状态处理
         ol.setUWzbs(wzbs ? IntegrityMarkEnum.NONE : IntegrityMarkEnum.SECTION);
-        ol.setActive(wzbs ? ValidityIndicatorEnum.INVALID : ValidityIndicatorEnum.VALID);
+        ol.setActive(wzbs ? ValidityEnum.INVALID : ValidityEnum.VALID);
         ol.setUQty(wzbs ? BigDecimal.ZERO : ol.getUQty().subtract(qty));
         baseMapper.updateById(ol);
     }

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.quaero.quaerosmartplatform.domain.enumeration.IntegrityMarkEnum;
-import com.quaero.quaerosmartplatform.domain.enumeration.ValidityIndicatorEnum;
+import com.quaero.quaerosmartplatform.domain.enumeration.ValidityEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -74,7 +74,7 @@ public class MaterialFlow implements Serializable {
     private Date uDocdate;
     //有效性标识	Y:有效；N：无效
     @TableField("U_Active")
-    private ValidityIndicatorEnum uActive;
+    private ValidityEnum uActive;
 
 
 }

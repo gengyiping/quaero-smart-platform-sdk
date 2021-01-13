@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.quaero.quaerosmartplatform.domain.enumeration.IntegrityMarkEnum;
-import com.quaero.quaerosmartplatform.domain.enumeration.ValidityIndicatorEnum;
+import com.quaero.quaerosmartplatform.domain.enumeration.ValidityEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -45,7 +45,7 @@ public class WarehouseLocation implements Serializable {
     private String DisNum;
     //有效性标识	Y:有效  N：无效 N0：无效（上了PDA可能不用N0状态）
     @TableField("U_Active")
-    private ValidityIndicatorEnum Active;
+    private ValidityEnum Active;
     //固定位置
     @TableField("U_GDWZ")
     private String uGdwz;

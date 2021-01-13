@@ -8,7 +8,7 @@ import com.quaero.quaerosmartplatform.domain.entity.IGE1;
 import com.quaero.quaerosmartplatform.domain.entity.MaterialFlow;
 import com.quaero.quaerosmartplatform.domain.enumeration.DocTypeEnum;
 import com.quaero.quaerosmartplatform.domain.enumeration.IntegrityMarkEnum;
-import com.quaero.quaerosmartplatform.domain.enumeration.ValidityIndicatorEnum;
+import com.quaero.quaerosmartplatform.domain.enumeration.ValidityEnum;
 import com.quaero.quaerosmartplatform.domain.mapper.IGE1Mapper;
 import com.quaero.quaerosmartplatform.domain.mapper.MaterialFlowMapper;
 import com.quaero.quaerosmartplatform.exceptions.BusinessException;
@@ -63,7 +63,7 @@ public class MaterialFlowServiceImpl extends ServiceImpl<MaterialFlowMapper, Mat
                     StringUtil.codeAddOne(dto.getBaseEntry(), 6) +
                     StringUtil.codeAddOne(dto.getBaseline(), 3);
             baseMapper.insert(MaterialFlow.builder()
-                    .uActive(ValidityIndicatorEnum.VALID)
+                    .uActive(ValidityEnum.VALID)
                     .uBarcode(barcode)
                     .uItemcode(dto.getItemCode())
                     .uDisnum(dto.getDisNum())
@@ -102,7 +102,7 @@ public class MaterialFlowServiceImpl extends ServiceImpl<MaterialFlowMapper, Mat
     public void confirmNonStockMaterialBatchTransfer(MaterialTransferBatchUpdateDto dto) {
         //非库存
         List<MaterialFlow> list = baseMapper.selectList(new QueryWrapper<>(MaterialFlow.builder()
-                .uYdwz(dto.getLocation()).uActive(ValidityIndicatorEnum.VALID).build()));
+                .uYdwz(dto.getLocation()).uActive(ValidityEnum.VALID).build()));
         list.forEach(m -> {
             doMaterialNonStock(m, true, m.getUQty(), dto.getTargetLocation());
         });
@@ -128,7 +128,7 @@ public class MaterialFlowServiceImpl extends ServiceImpl<MaterialFlowMapper, Mat
                 .uDoctype(ol.getUDoctype())
                 .uWzbs(wzbs ? IntegrityMarkEnum.ALL : IntegrityMarkEnum.SECTION)
                 .uQty(qty)
-                .uActive(ValidityIndicatorEnum.VALID)
+                .uActive(ValidityEnum.VALID)
                 .uCardcode(ol.getUCardcode())
                 .uCreator(userService.getCurrentUser().getName())
                 .uDocdate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
@@ -144,7 +144,7 @@ public class MaterialFlowServiceImpl extends ServiceImpl<MaterialFlowMapper, Mat
         baseMapper.insert(nl);
         //原位置状态处理
         ol.setUWzbs(wzbs ? IntegrityMarkEnum.NONE : IntegrityMarkEnum.SECTION);
-        ol.setUActive(wzbs ? ValidityIndicatorEnum.INVALID : ValidityIndicatorEnum.VALID);
+        ol.setUActive(wzbs ? ValidityEnum.INVALID : ValidityEnum.VALID);
         ol.setUQty(wzbs ? BigDecimal.ZERO : ol.getUQty().subtract(qty));
         baseMapper.updateById(ol);
     }

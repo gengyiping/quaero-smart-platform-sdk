@@ -3,7 +3,7 @@ package com.quaero.quaerosmartplatform.domain.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.quaero.quaerosmartplatform.domain.enumeration.ValidityIndicatorEnum;
+import com.quaero.quaerosmartplatform.domain.enumeration.ValidityEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,7 +41,7 @@ public class UserAuthority implements Serializable {
     private Integer LogInst;
 
     @TableField("U_CK")
-    private ValidityIndicatorEnum uCk;
+    private ValidityEnum uCk;
 
     @TableField("U_Code")
     private String uCode;

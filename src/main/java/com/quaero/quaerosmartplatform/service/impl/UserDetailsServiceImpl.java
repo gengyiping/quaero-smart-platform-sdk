@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.quaero.quaerosmartplatform.domain.bo.SecurityUserDetails;
 import com.quaero.quaerosmartplatform.domain.entity.User;
 import com.quaero.quaerosmartplatform.domain.entity.UserAuthority;
-import com.quaero.quaerosmartplatform.domain.enumeration.ValidityIndicatorEnum;
+import com.quaero.quaerosmartplatform.domain.enumeration.ValidityEnum;
 import com.quaero.quaerosmartplatform.service.AuthorityService;
 import com.quaero.quaerosmartplatform.service.UserAuthorityService;
 import com.quaero.quaerosmartplatform.service.UserService;
@@ -47,7 +47,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         //根据用户id获取用户权限 003_1
         List<UserAuthority> userAuthorities = userAuthorityService.list(
-                new QueryWrapper<>(UserAuthority.builder().Code(user.getCode()).uCk(ValidityIndicatorEnum.VALID).build()));
+                new QueryWrapper<>(UserAuthority.builder().Code(user.getCode()).uCk(ValidityEnum.VALID).build()));
         // 填充权限
         Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
         for (UserAuthority userAuthority : userAuthorities) {
