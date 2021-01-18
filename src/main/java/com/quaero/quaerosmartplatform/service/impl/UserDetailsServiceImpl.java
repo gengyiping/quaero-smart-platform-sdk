@@ -2,10 +2,8 @@ package com.quaero.quaerosmartplatform.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.quaero.quaerosmartplatform.domain.bo.SecurityUserDetails;
+import com.quaero.quaerosmartplatform.domain.entity.Authority;
 import com.quaero.quaerosmartplatform.domain.entity.User;
-import com.quaero.quaerosmartplatform.domain.entity.UserAuthority;
-import com.quaero.quaerosmartplatform.domain.enumeration.ValidityEnum;
-import com.quaero.quaerosmartplatform.service.AuthorityService;
 import com.quaero.quaerosmartplatform.service.UserAuthorityService;
 import com.quaero.quaerosmartplatform.service.UserService;
 import lombok.extern.log4j.Log4j2;
@@ -34,8 +32,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserService userService;
     @Autowired
     private UserAuthorityService userAuthorityService;
-    @Autowired
-    private AuthorityService authorityService;
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
@@ -45,17 +41,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             // 实际当用户不存在时，应该页面显示错误信息，并跳转到登录界面
             throw new UsernameNotFoundException("该用户不存在！");
         }
-        //根据用户id获取用户权限 003_1
-        List<UserAuthority> userAuthorities = userAuthorityService.list(
-                new QueryWrapper<>(UserAuthority.builder().Code(user.getCode()).uCk(ValidityEnum.VALID).build()));
+        //根据用户id获取用户权限 003_1 -> 004 url
+        List<Authority> userAuthority = userAuthorityService.getUserAuthority(user.getCode());
         // 填充权限
         Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
-        for (UserAuthority userAuthority : userAuthorities) {
-            authorities.add(new SimpleGrantedAuthority(userAuthority.getUName()));
+        for (Authority authority : userAuthority) {
+            authorities.add(new SimpleGrantedAuthority(authority.getUUrl()));
         }
-        //填充权限菜单
-        //List<Authority> menus=authorityService.getRoleMenuByRoles(roles);
-
         user.setUPassword(new BCryptPasswordEncoder().encode(user.getUPassword()));
         return new SecurityUserDetails(user,authorities);
     }

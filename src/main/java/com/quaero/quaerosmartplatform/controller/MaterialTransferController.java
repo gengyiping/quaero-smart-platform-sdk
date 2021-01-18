@@ -21,7 +21,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +33,7 @@ import java.util.List;
 
 /**
  * <p>
- * 物料转移 7-1
+ * 物料转移 7-1 7-2 7-3 7-4
  * </p>
  *
  * @author wuhanzhang@
@@ -47,16 +46,25 @@ import java.util.List;
 @RequestMapping("/api/materialTransfer")
 public class MaterialTransferController {
 
-    @Autowired
-    private MaterialFlowService materialFlowService;
-    @Autowired
-    private WarehouseLocationService warehouseLocationService;
-    @Autowired
-    private OitmService oitmService;
-    @Autowired
-    private IGN1Service ign1Service;
-    @Autowired
-    private ChWmsGoodsin1Service chWmsGoodsin1Service;
+
+    private final MaterialFlowService materialFlowService;
+
+    private final WarehouseLocationService warehouseLocationService;
+
+    private final OitmService oitmService;
+
+    private final IGN1Service ign1Service;
+
+    private final ChWmsGoodsin1Service chWmsGoodsin1Service;
+
+    public MaterialTransferController(MaterialFlowService materialFlowService, WarehouseLocationService warehouseLocationService,
+                                      OitmService oitmService, IGN1Service ign1Service, ChWmsGoodsin1Service chWmsGoodsin1Service){
+        this.materialFlowService = materialFlowService;
+        this.warehouseLocationService = warehouseLocationService;
+        this.oitmService = oitmService;
+        this.ign1Service = ign1Service;
+        this.chWmsGoodsin1Service = chWmsGoodsin1Service;
+    }
 
     /////////////转移相关////////////
 

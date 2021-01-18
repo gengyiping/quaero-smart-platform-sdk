@@ -2,4 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.quaero.quaerosmartplatform.domain.mapper.UserAuthorityMapper">
 
+    <select id="getUserAuthority" resultType="com.quaero.quaerosmartplatform.domain.entity.Authority">
+        SELECT authority.*
+        FROM [dbo].[@JX_PDA003] as u
+        LEFT JOIN [dbo].[@JX_PDA003_1] as userAuthority ON u.Code = userAuthority.Code
+        LEFT JOIN [dbo].[@JX_PDA004] as authority ON authority.Code = userAuthority.U_Code
+        WHERE u.Code = 'U601' AND userAuthority.U_CK = 'Y'
+    </select>
 </mapper>

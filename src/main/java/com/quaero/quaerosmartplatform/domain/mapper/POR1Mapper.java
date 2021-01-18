@@ -1,7 +1,7 @@
 package com.quaero.quaerosmartplatform.domain.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.quaero.quaerosmartplatform.domain.entity.MaterialPlan;
+import com.quaero.quaerosmartplatform.domain.entity.POR1;
 
 /**
  * <p>
@@ -9,8 +9,8 @@ import com.quaero.quaerosmartplatform.domain.entity.MaterialPlan;
  * </p>
  *
  * @author wuhanzhang@
- * @since 2021-01-13
+ * @since 2021-01-18
  */
-public interface MaterialPlanMapper extends BaseMapper<MaterialPlan> {
+public interface POR1Mapper extends BaseMapper<POR1> {
 
 }

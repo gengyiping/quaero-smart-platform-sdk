@@ -1,7 +1,7 @@
 package com.quaero.quaerosmartplatform.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.quaero.quaerosmartplatform.domain.entity.MaterialPlan;
+import com.quaero.quaerosmartplatform.domain.entity.POR1;
 
 /**
  * <p>
@@ -9,8 +9,8 @@ import com.quaero.quaerosmartplatform.domain.entity.MaterialPlan;
  * </p>
  *
  * @author wuhanzhang@
- * @since 2021-01-13
+ * @since 2021-01-18
  */
-public interface MaterialPlanService extends IService<MaterialPlan> {
+public interface POR1Service extends IService<POR1> {
 
 }

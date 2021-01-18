@@ -1,7 +1,10 @@
 package com.quaero.quaerosmartplatform.domain.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.quaero.quaerosmartplatform.domain.entity.Authority;
 import com.quaero.quaerosmartplatform.domain.entity.UserAuthority;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.quaero.quaerosmartplatform.domain.entity.UserAuthority;
  */
 public interface UserAuthorityMapper extends BaseMapper<UserAuthority> {
 
+    List<Authority> getUserAuthority(String userCode);
 }

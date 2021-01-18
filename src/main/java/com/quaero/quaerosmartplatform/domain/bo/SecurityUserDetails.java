@@ -42,7 +42,7 @@ public class SecurityUserDetails extends User implements UserDetails {
         this.setUPassword(user.getUPassword());
         this.setCode(user.getCode());
         //String encode = new BCryptPasswordEncoder().encode("123456");
-        this.setAuthorities(authorities);
+        //this.setAuthorities(authorities);
     }
 
     /**

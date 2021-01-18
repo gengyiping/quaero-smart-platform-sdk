@@ -1,13 +1,14 @@
 package com.quaero.quaerosmartplatform.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import lombok.*;
-import lombok.experimental.Accessors;
+import java.io.Serializable;
 
 /**
  * <p>
@@ -31,39 +32,6 @@ public class User implements Serializable {
 
     @TableField("Name")
     private String Name;
-
-    @TableField("DocEntry")
-    private Integer DocEntry;
-
-    @TableField("Canceled")
-    private String Canceled;
-
-    @TableField("Object")
-    private String Object;
-
-    @TableField("LogInst")
-    private Integer LogInst;
-
-    @TableField("UserSign")
-    private Integer UserSign;
-
-    @TableField("Transfered")
-    private String Transfered;
-
-    @TableField("CreateDate")
-    private Date CreateDate;
-
-    @TableField("CreateTime")
-    private Integer CreateTime;
-
-    @TableField("UpdateDate")
-    private Date UpdateDate;
-
-    @TableField("UpdateTime")
-    private Integer UpdateTime;
-
-    @TableField("DataSource")
-    private String DataSource;
 
     @TableField("U_PassWord")
     private String uPassword;

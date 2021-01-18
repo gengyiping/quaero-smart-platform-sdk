@@ -31,15 +31,6 @@ public class UserAuthority implements Serializable {
     @TableId("Code")
     private String Code;
 
-    @TableField("LineId")
-    private Integer LineId;
-
-    @TableField("Object")
-    private String Object;
-
-    @TableField("LogInst")
-    private Integer LogInst;
-
     @TableField("U_CK")
     private ValidityEnum uCk;
 

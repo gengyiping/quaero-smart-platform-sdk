@@ -1,12 +1,14 @@
 package com.quaero.quaerosmartplatform.domain.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.quaero.quaerosmartplatform.domain.enumeration.ValidityEnum;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,96 +22,82 @@ import java.util.Date;
  * @since 2021-01-13
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
-@TableName("[dbo].[@JX_PDA008_1]")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@TableName("[dbo].[@JX_PDA009]")
 public class MaterialPlanInfo implements Serializable {
 
     private static final long serialVersionUID=1L;
 
-    /**
-     * 计划到料单号
-     */
-    @TableId("DocEntry")
-    private Integer DocEntry;
-
-    @TableField("LineId")
-    private Integer LineId;
-
-    /*@TableField("VisOrder")
-    private Integer VisOrder;
-
-    @TableField("Object")
-    private String Object;
-
-    @TableField("LogInst")
-    private Integer LogInst;*/
+    @TableId(value = "U_ID", type = IdType.AUTO)
+    private Long uId;
 
     /**
      * 完成送检（Y/N）
      */
-    @TableField("U_Sjbs")
-    private ValidityEnum uSjbs;
+    @TableField("U_SJBS")
+    private ValidityEnum uSJBS;
 
     /**
-     * 收料确认（Y/N）  
+     * 收料确认（Y/N）
      */
-    @TableField("U_Slbs")
-    private ValidityEnum uSlbs;
+    @TableField("U_SLBS")
+    private ValidityEnum uSLBS;
 
     /**
      * 计划过期（Y/N）
      */
-    @TableField("U_Gqbs")
-    private ValidityEnum uGqbs;
+    @TableField("U_GQBS")
+    private ValidityEnum uGQBS;
 
     /**
      * 料号 
      */
     @TableField("U_ItemCode")
-    private String uItemcode;
+    private String uItemCode;
 
     /**
      * 名称
      */
     @TableField("U_ItemName")
-    private String uItemname;
+    private String uItemName;
 
     /**
      * 来源类型
      */
     @TableField("U_BaseType")
-    private String uBasetype;
+    private String uBaseType;
 
     /**
      * 来源单号
      */
     @TableField("U_BaseEntry")
-    private String uBaseentry;
+    private String uBaseEntry;
 
     /**
      * 来源行号
      */
     @TableField("U_BaseLine")
-    private String uBaseline;
+    private String uBaseLine;
 
     /**
      * 计划到料数量
      */
     @TableField("U_PlannedQty")
-    private String uPlannedqty;
+    private String uPlannedQty;
 
     /**
      * 计划到料日期
      */
     @TableField("U_DueDate")
-    private Date uDuedate;
+    private Date uDueDate;
 
     /**
      * 信息填写人 账号
      */
     @TableField("U_UserSign")
-    private String uUsersign;
+    private String uUserSign;
 
     /**
      * 信息填写人名称
@@ -120,26 +108,26 @@ public class MaterialPlanInfo implements Serializable {
     /**
      * 填写日期  
      */
-    @TableField("U_Taxdate")
-    private Date uTaxdate;
+    @TableField("U_TaxDate")
+    private Date uTaxDate;
 
     /**
      * 当时缺料数 
      */
-    @TableField("U_Pmcqty")
-    private String uPmcqty;
+    @TableField("U_PMCQTY")
+    private String uPmcQty;
 
     /**
      * pmc允许收料（Y/N）
      */
-    @TableField("U_Pmcbs")
-    private ValidityEnum uPmcbs;
+    @TableField("U_PMCBS")
+    private ValidityEnum uPmcBS;
 
     /**
      * pmc收料要求  
      */
-    @TableField("U_Pmcrem")
-    private String uPmcrem;
+    @TableField("U_PMCREM")
+    private String uPmcRem;
 
     /**
      * 计划收料人 
@@ -151,13 +139,13 @@ public class MaterialPlanInfo implements Serializable {
      * 计划收料时间
      */
     @TableField("U_DocDueDate")
-    private Date uDocduedate;
+    private Date uDocDueDate;
 
     /**
      * 收料确认登录账号 
      */
     @TableField("U_UserSign3")
-    private String uUsersign3;
+    private String uUserSign3;
 
     /**
      * 收料人 
@@ -169,19 +157,14 @@ public class MaterialPlanInfo implements Serializable {
      * 收料确认日期  
      */
     @TableField("U_DocDate")
-    private Date uDocdate;
+    private Date uDocDate;
 
     /**
      * 收料物理位置
      */
-    @TableField("U_Wlwz")
-    private String uWlwz;
+    @TableField("U_WLWZ")
+    private String uWLWZ;
 
-    /**
-     * 确认收料方式  
-     */
-    @TableField("U_Slfs")
-    private String uSlfs;
 
     /**
      * 1：点数信息 
@@ -216,8 +199,8 @@ public class MaterialPlanInfo implements Serializable {
     /**
      * 送检单号
      */
-    @TableField("U_Sjdh")
-    private String uSjdh;
+    @TableField("U_SJDH")
+    private String uSJDH;
 
 
 }
