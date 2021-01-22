@@ -34,12 +34,6 @@ public class POR1 implements Serializable {
     @TableField("LineNum")
     private Integer LineNum;
 
-    @TableField("TargetType")
-    private Integer TargetType;
-
-    @TableField("TrgetEntry")
-    private Integer TargetEntry;
-
     @TableField("ItemCode")
     private String ItemCode;
 

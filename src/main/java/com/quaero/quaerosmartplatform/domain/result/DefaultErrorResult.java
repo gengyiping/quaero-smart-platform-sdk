@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.http.HttpStatus;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -81,7 +80,11 @@ public class DefaultErrorResult implements Result {
 	public static DefaultErrorResult failure(ResultCode resultCode, Throwable e, HttpStatus httpStatus) {
 		DefaultErrorResult result = new DefaultErrorResult();
 		result.setCode(resultCode.code());
-		result.setMessage(resultCode.message());
+		if (e instanceof BusinessException) {
+			result.setMessage(e.getMessage());
+		}else {
+			result.setMessage(resultCode.message());
+		}
 		result.setStatus(httpStatus.value());
 		result.setError(httpStatus.getReasonPhrase());
 		result.setException(e.getClass().getName());

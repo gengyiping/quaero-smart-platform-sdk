@@ -1,4 +1,4 @@
-package com.quaero.quaerosmartplatform.config.swagger;
+package com.quaero.quaerosmartplatform.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

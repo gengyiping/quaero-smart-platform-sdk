@@ -66,8 +66,8 @@ public abstract class BaseGlobalExceptionHandler {
 	 * 处理使用@Validated注解时，参数验证错误异常（反400错误码）
 	 */
 	protected DefaultErrorResult handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request) {
-		log.info("handleMethodArgumentNotValidException start, uri:{}, caused by: ", request.getRequestURI(), e);
 		List<ParameterInvalidItem> parameterInvalidItemList = ParameterInvalidItemHelper.convertBindingResultToMapParameterInvalidItemList(e.getBindingResult());
+		log.info("handleMethodArgumentNotValidException start, uri:{}, caused by: {}", request.getRequestURI(), parameterInvalidItemList);
 		return DefaultErrorResult.failure(ResultCode.PARAM_IS_INVALID, e, HttpStatus.BAD_REQUEST, parameterInvalidItemList);
 	}
 

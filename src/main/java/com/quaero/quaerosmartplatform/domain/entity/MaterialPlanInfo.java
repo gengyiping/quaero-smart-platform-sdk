@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -85,7 +86,7 @@ public class MaterialPlanInfo implements Serializable {
      * 计划到料数量
      */
     @TableField("U_PlannedQty")
-    private String uPlannedQty;
+    private BigDecimal uPlannedQty;
 
     /**
      * 计划到料日期
@@ -115,7 +116,7 @@ public class MaterialPlanInfo implements Serializable {
      * 当时缺料数 
      */
     @TableField("U_PMCQTY")
-    private String uPmcQty;
+    private BigDecimal uPmcQty;
 
     /**
      * pmc允许收料（Y/N）
@@ -202,5 +203,15 @@ public class MaterialPlanInfo implements Serializable {
     @TableField("U_SJDH")
     private String uSJDH;
 
+    /**
+     * 到料方式
+     */
+    @TableField("U_DLFS")
+    private String uDLFS;
 
+    /**
+     * 物理信息
+     */
+    @TableField("U_WLXX")
+    private String uWLXX;
 }

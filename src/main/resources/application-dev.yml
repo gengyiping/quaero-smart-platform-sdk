@@ -44,6 +44,15 @@ spring:
       wall:
         config:
           multi-statement-allow: true
-
+  redis:
+    host: 127.0.0.1
+    # Redis服务器连接端⼝
+    port: 6379
+    lettuce:
+      pool:
+        max-idle: 50
+        min-idle: 1
+        max-active: 200
+        max-wait: 1000ms
 login:
   path: https://test.quaerolife.com/api/app/login
