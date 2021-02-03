@@ -6,6 +6,7 @@ import com.quaero.quaerosmartplatform.domain.dto.MaterialPlanUnpaidListDto;
 import com.quaero.quaerosmartplatform.domain.entity.MaterialPlanInfo;
 import com.quaero.quaerosmartplatform.domain.entity.OPOR;
 import com.quaero.quaerosmartplatform.domain.enumeration.ResultCode;
+import com.quaero.quaerosmartplatform.domain.enumeration.ValidityEnum;
 import com.quaero.quaerosmartplatform.domain.vo.MaterialPlanUnpaidListVo;
 import com.quaero.quaerosmartplatform.exceptions.BusinessException;
 import com.quaero.quaerosmartplatform.exceptions.DataNotFoundException;
@@ -76,7 +77,7 @@ public class MaterialPlanInfoController {
             throw new BusinessException(ResultCode.RESULT_DATA_NONE);
         }
         listVos.forEach(l -> {
-            MaterialPlanUnpaidListVo vo = (MaterialPlanUnpaidListVo) redisUtil.hget("unpaidList", l.getDocEntry() + "," + l.getLineNum());
+            MaterialPlanUnpaidListVo vo = (MaterialPlanUnpaidListVo) redisUtil.hget("unpaidListByOrder", l.getDocEntry() + "," + l.getLineNum());
             if (vo == null) {
                 redisUtil.hset("unpaidListByOrder", l.getDocEntry() + "," + l.getLineNum(), l);
             } else {
@@ -92,7 +93,7 @@ public class MaterialPlanInfoController {
     @PostMapping("/unpaidEditByOrder")
     @ApiOperation("按订单计划到料信息输入")
     public void unpaidEdit(@Validated @RequestBody MaterialUnpaidEdit edit) {
-        MaterialPlanUnpaidListVo vo = (MaterialPlanUnpaidListVo) redisUtil.hget("unpaidList", edit.getDocEntry() + "," + edit.getLineNum());
+        MaterialPlanUnpaidListVo vo = (MaterialPlanUnpaidListVo) redisUtil.hget("unpaidListByOrder", edit.getDocEntry() + "," + edit.getLineNum());
         if (vo == null) {
             throw new DataNotFoundException("对象不存在，请重新查询进入");
         }
@@ -106,13 +107,15 @@ public class MaterialPlanInfoController {
     @PutMapping("/unpaidByOrder")
     @ApiOperation("按订单计划到料提交到料计划")
     public void unpaidByOrder(@Validated @RequestBody List<MaterialUnpaidPutByOrder> puts, Authentication authentication) {
-        List<MaterialPlanInfo> vos = new ArrayList<>();
         for(MaterialUnpaidPutByOrder put : puts){
-            MaterialPlanUnpaidListVo vo = (MaterialPlanUnpaidListVo) redisUtil.hget("unpaidList", put.getDocEntry() + "," + put.getLineNum());
+            MaterialPlanUnpaidListVo vo = (MaterialPlanUnpaidListVo) redisUtil.hget("unpaidListByOrder", put.getDocEntry() + "," + put.getLineNum());
             if (vo == null) {
                 throw new DataNotFoundException("对象不存在，请重新查询进入");
             }
-            vos.add(MaterialPlanInfo.builder()
+            materialPlanInfoService.save(MaterialPlanInfo.builder()
+                    .uSJBS(ValidityEnum.INVALID)
+                    .uSLBS(ValidityEnum.INVALID)
+                    .uGQBS(ValidityEnum.INVALID)
                     .uItemCode(vo.getItemCode())
                     .uItemName(vo.getDscription())
                     .uBaseEntry(String.valueOf(vo.getDocEntry()))
@@ -120,6 +123,10 @@ public class MaterialPlanInfoController {
                     .uBaseType(vo.getObjType())
                     .uPlannedQty(vo.getPlannedQty())
                     .uDueDate(vo.getDueDate())
+                    .uPmcQty(vo.getUnpaidQuantity())
+                    .UShipDate(vo.getShipDate())
+                    .UCardName(vo.getCardName())
+                    .UCardCode(vo.getCardCode())
                     .uUserSign(authentication.getName())
                     .uName(userService.getById(authentication.getName()).getName())
                     .uTaxDate(new Date())
@@ -127,7 +134,6 @@ public class MaterialPlanInfoController {
                     .uWLWZ(vo.getWlxx())
                     .build());
         }
-        materialPlanInfoService.saveBatch(vos);
     }
 
     @Data

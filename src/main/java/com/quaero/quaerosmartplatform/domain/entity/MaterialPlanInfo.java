@@ -214,4 +214,22 @@ public class MaterialPlanInfo implements Serializable {
      */
     @TableField("U_WLXX")
     private String uWLXX;
+
+    /**
+     * 预交日期
+     */
+    @TableField("U_ShipDate")
+    private Date UShipDate;
+
+    /**
+     * 供应商代号
+     */
+    @TableField("U_CardCode")
+    private String UCardCode;
+
+    /**
+     * 供应商名称
+     */
+    @TableField("U_CardName")
+    private String UCardName;
 }

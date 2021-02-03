@@ -5,13 +5,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
  * <p>
- * 按料号计划到料未交查询列表请求参
+ * 按料号计划到料查询列表请求参
  * </p>
  *
  * @author wuhanzhang@
@@ -19,10 +17,9 @@ import java.util.Date;
  */
 @Data
 @ApiModel
-public class MaterialPlanUnpaidListDto {
+public class MaterialPlanListDto {
     @ApiModelProperty(value = "供应商代号")
-    @NotBlank(message = "供应商代号不能空")
-    private String cardCode;
+    private String careCode;
     @ApiModelProperty(value = "料号")
     private String itemCode;
     @ApiModelProperty(value = "业务员")
@@ -33,7 +30,4 @@ public class MaterialPlanUnpaidListDto {
     @ApiModelProperty(value = "到料日期之前")
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date arrivalDateBefore;
-    @ApiModelProperty(value = "订单类型 采购订单未交0 生产订单未交1")
-    @NotNull(message = "订单未交类型不能空")
-    private Integer orderType;
 }

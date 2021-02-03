@@ -97,8 +97,8 @@
     WHERE
         t1.LineStatus = 'O'
         AND t1.OpenQty - ISNULL( t7.U_Quantity, '0' ) - ISNULL( t8.PasQty, '0' ) > 0
-        <if test="listDto.careCode != null and listDto.careCode != ''">
-            AND t2.CardCode = #{listDto.careCode}
+        <if test="listDto.cardCode != null and listDto.cardCode != ''">
+            AND t2.CardCode = #{listDto.cardCode}
         </if>
         <if test="listDto.itemCode !=null and listDto.itemCode != ''">
             AND t1.itemCode like concat('%',#{listDto.itemCode},'%')

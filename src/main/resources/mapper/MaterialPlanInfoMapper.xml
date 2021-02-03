@@ -2,4 +2,48 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.quaero.quaerosmartplatform.domain.mapper.MaterialPlanInfoMapper">
 
+    <select id="MATERIAL_PLAN_LIST_VOS"
+            resultType="com.quaero.quaerosmartplatform.domain.vo.MaterialPlanListVo">
+    SELECT U_BaseEntry baseEntry,U_BaseLine BaseLine, U_PlannedQty plannedQty, U_DueDate dueDate, U_PMCQTY unpaidQuantity, U_ShipDate shipDate,
+    U_CardCode cardCode, U_CardName cardName, U_ItemCode itemCode, U_ItemName itemName
+    FROM [dbo].[@JX_PDA009]
+    WHERE U_SLBS = 'N' AND U_GQBS = 'N' AND U_SJBS = 'N'
+        <if test="listDto.careCode != null and listDto.careCode != ''">
+            AND U_CardCode = #{listDto.careCode}
+        </if>
+        <if test="listDto.itemCode !=null and listDto.itemCode != ''">
+            AND U_ItemCode like concat('%',#{listDto.itemCode},'%')
+        </if>
+        <if test="listDto.salesmanName !=null and listDto.salesmanName != ''">
+            AND U_Name = #{listDto.salesmanName}
+        </if>
+        <if test="listDto.arrivalDateAfter != null">
+            AND U_DueDate &gt;= #{listDto.arrivalDateAfter}
+        </if>
+        <if test="listDto.arrivalDateBefore != null">
+            AND U_DueDate &lt;= #{listDto.arrivalDateBefore}
+        </if>
+        AND U_DueDate >= convert(datetime,convert(date,getdate()))
+        ORDER BY U_DueDate
+    </select>
+    <select id="MATERIAL_PLAN_BY_DATE_LIST_VOS"
+            resultType="com.quaero.quaerosmartplatform.domain.vo.MaterialPlanByDateListVo">
+    SELECT U_PlannedQty plannedQty, U_DueDate dueDate, U_PMCQTY unpaidQuantity, U_ShipDate shipDate,
+    U_CardCode cardCode, U_CardName cardName, U_ItemCode itemCode, U_ItemName itemName, U_PMCQTY pmcQty
+    FROM [dbo].[@JX_PDA009]
+        WHERE U_SLBS = 'N' AND U_GQBS = 'N' AND U_SJBS = 'N'
+        <if test="listDto.salesmanName !=null and listDto.salesmanName != ''">
+            AND U_Name = #{listDto.salesmanName}
+        </if>
+        <if test="listDto.arrivalDateAfter != null">
+            AND U_DueDate &gt;= #{listDto.arrivalDateAfter}
+        </if>
+        <if test="listDto.arrivalDateBefore != null">
+            AND U_DueDate &lt;= #{listDto.arrivalDateBefore}
+        </if>
+        AND U_DueDate >= convert(datetime,convert(date,getdate()))
+        ORDER BY U_DueDate
+    </select>
+
+
 </mapper>
