@@ -9,36 +9,35 @@ import java.util.Date;
 
 /**
  * <p>
- * 计划到料查询列表
+ * 无计划到料查询列表返回参
  * </p>
  *
  * @author wuhanzhang@
- * @since 2021/1/25 8:57
+ * @since 2021/1/19 8:33
  */
 @Data
 @ApiModel
-public class MaterialPlanListVo {
-    private long uId;
+public class MaterialUnPlanListVo {
     @ApiModelProperty("来源单号")
-    private Integer baseEntry;
+    private Integer docEntry;
     @ApiModelProperty("来源行号")
-    private Integer baseLine;
-    @ApiModelProperty("计划到料数")
-    private BigDecimal plannedQty;
-    @ApiModelProperty("计划到料日期")
-    private Date dueDate;
-    @ApiModelProperty("未交数量")
-    private BigDecimal unpaidQuantity;
-    @ApiModelProperty("预交日期")
-    private Date shipDate;
-    @ApiModelProperty("名称规格")
-    private String itemName;
+    private Integer lineNum;
     @ApiModelProperty("料号")
     private String itemCode;
+    @ApiModelProperty("名称规格")
+    private String dscription;
+    @ApiModelProperty("未交数量总和")
+    private BigDecimal unpaidQuantity;
+    @ApiModelProperty("交货日期 要求到料日期")
+    private Date shipDate;
+    @ApiModelProperty("业务员")
+    private String slpName;
     @ApiModelProperty("供应商编号")
     private String cardCode;
     @ApiModelProperty("供应商名称")
     private String cardName;
+    @ApiModelProperty("来源类型")
+    private String objType;
     @ApiModelProperty("物理位置")
     private String uwlwz;
     @ApiModelProperty("点数信息")

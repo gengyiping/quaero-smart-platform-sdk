@@ -31,4 +31,9 @@ public class MaterialPlanInfoServiceImpl extends ServiceImpl<MaterialPlanInfoMap
     public List<MaterialPlanByDateListVo> MATERIAL_PLAN_BY_DATE_LIST_VOS(MaterialPlanListDto listDto) {
         return baseMapper.MATERIAL_PLAN_BY_DATE_LIST_VOS(listDto);
     }
+
+    @Override
+    public void materialPlanScheduled() {
+        baseMapper.materialPlanScheduled();
+    }
 }

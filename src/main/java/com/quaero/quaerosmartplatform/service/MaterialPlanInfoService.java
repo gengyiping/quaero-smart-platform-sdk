@@ -21,4 +21,6 @@ public interface MaterialPlanInfoService extends IService<MaterialPlanInfo> {
     List<MaterialPlanListVo> MATERIAL_PLAN_LIST_VOS(MaterialPlanListDto listDto);
 
     List<MaterialPlanByDateListVo> MATERIAL_PLAN_BY_DATE_LIST_VOS(MaterialPlanListDto listDto);
+
+    void materialPlanScheduled();
 }

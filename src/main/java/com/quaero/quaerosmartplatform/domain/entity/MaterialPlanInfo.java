@@ -210,7 +210,7 @@ public class MaterialPlanInfo implements Serializable {
     private String uDLFS;
 
     /**
-     * 物理信息
+     * 物流信息
      */
     @TableField("U_WLXX")
     private String uWLXX;

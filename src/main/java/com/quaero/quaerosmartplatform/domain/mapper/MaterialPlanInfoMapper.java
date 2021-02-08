@@ -22,4 +22,6 @@ public interface MaterialPlanInfoMapper extends BaseMapper<MaterialPlanInfo> {
     List<MaterialPlanListVo> MATERIAL_PLAN_LIST_VOS(@Param("listDto")MaterialPlanListDto listDto);
 
     List<MaterialPlanByDateListVo> MATERIAL_PLAN_BY_DATE_LIST_VOS(@Param("listDto")MaterialPlanListDto listDto);
+
+    void materialPlanScheduled();
 }

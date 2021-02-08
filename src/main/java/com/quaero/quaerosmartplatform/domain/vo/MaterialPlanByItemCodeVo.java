@@ -26,4 +26,6 @@ public class MaterialPlanByItemCodeVo {
     private BigDecimal unpaidQuantity;
     @ApiModelProperty("列表")
     private List<MaterialPlanListVo> list;
+    @ApiModelProperty("列表")
+    private List<MaterialUnPlanListVo> unPlanList;
 }

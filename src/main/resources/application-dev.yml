@@ -56,3 +56,7 @@ spring:
         max-wait: 1000ms
 login:
   path: https://test.quaerolife.com/api/app/login
+
+customize:
+  #缓存时间 60*24*24
+  redisTime: 86400

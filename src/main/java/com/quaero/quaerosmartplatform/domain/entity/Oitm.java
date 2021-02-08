@@ -1,13 +1,14 @@
 package com.quaero.quaerosmartplatform.domain.entity;
 
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.*;
-import lombok.experimental.Accessors;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -31,5 +32,24 @@ public class Oitm implements Serializable {
 
     @TableField("ItemName")
     private String ItemName;
+
+    //缺少昂贵物料
+    /**
+     * 是否研发物料 Y N
+     */
+    @TableField("U_SFYFWL")
+    private String SFYFWL;
+
+    /**
+     * 是否免检物料 Y N
+     */
+    @TableField("U_MJWL")
+    private String MJWL;
+
+    /**
+     * 是否物料等级
+     */
+    @TableField("U_WLDJ")
+    private String WLDJ;
 
 }
