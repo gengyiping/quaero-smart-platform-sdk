@@ -148,9 +148,10 @@ public class MaterialPlanInfoController {
                     .uWLXX(vo.getWlxx())
                     .build();
             if (materialPlanInfoService.count(new QueryWrapper<>(info)) > 0) {
-                insert.setUId(materialPlanInfoService.getOne(new QueryWrapper<>(info)).getUId());
+                insert.setUId(materialPlanInfoService.list(new QueryWrapper<>(info)).get(0).getUId());
             }
             materialPlanInfoService.saveOrUpdate(insert);
+            redisUtil.hdel("unpaidListByOrder", put.getDocEntry() + "," + put.getLineNum());
         }
     }
 
