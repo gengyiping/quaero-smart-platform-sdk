@@ -2,4 +2,184 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.quaero.quaerosmartplatform.domain.mapper.OWORMapper">
 
+    <select id="unpaidList" resultType="com.quaero.quaerosmartplatform.domain.vo.MaterialPlanUnpaidListVo">
+        SELECT
+        t0.DocEntry docEntry ,
+        t0.LineNum lineNum ,
+        t0.ObjType objType ,
+        t0.DueDate shipDate ,
+        t1.U_NAME slpName ,
+        t0.OcrCode cardName ,
+        t0.ItemCode itemCode ,
+        t0.ProdName dscription ,
+        t0.PlannedQty - t0.CmpltQty - ISNULL(t7.U_Quantity, '0')
+        - ISNULL(t8.PasQty, '0') unpaidQuantity ,
+        t9.PMCZD pmcZD ,
+        t9.ZZQL zzql ,
+        t9.JYJFQTY * -1 jyjfQTY
+        FROM    dbo.OWOR t0
+        INNER JOIN dbo.OUSR t1 ON t0.UserSign = t1.USERID
+        LEFT JOIN ( SELECT  t1.U_PoEntry ,
+        SUM(t1.U_Quantity - ISNULL(t2.U_ApplQty, 0)) U_Quantity
+        FROM    [dbo].[@CH_WMS_GOODSIN] t0
+        INNER JOIN [dbo].[@CH_WMS_GOODSIN_1] t1 ON t0.DocEntry = t1.DocEntry
+        LEFT JOIN ( SELECT  h1.U_CHKDoc ,
+        h1.U_CHKLine ,
+        SUM(h1.U_ApplQty) U_ApplQty
+        FROM    [dbo].[@CH_WMS_IQCRPT] h0
+        INNER JOIN [dbo].[@CH_WMS_IQCRPT_2] h1 ON h0.DocEntry = h1.DocEntry
+        WHERE   h0.Canceled = 'N'
+        GROUP BY h1.U_CHKDoc ,
+        h1.U_CHKLine
+        ) t2 ON t1.DocEntry = t2.U_CHKDoc
+        AND t1.LineId = t2.U_CHKLine
+        WHERE   t0.Canceled = 'N'
+        AND ISNULL(t1.U_SFMJ, 'N') = 'N'
+        AND t1.U_Quantity - ISNULL(t2.U_ApplQty, 0) > 0
+        AND t0.U_LogiType = '03'
+        GROUP BY t1.U_PoEntry
+        ) t7 ON t0.DocEntry = t7.U_PoEntry
+        LEFT JOIN ( SELECT  h.U_PoEntry ,
+        SUM(ISNULL(h.U_PasQty, 0)) PasQty
+        FROM    (
+        --非免检
+        SELECT    t2.U_PoEntry ,
+        t0.U_PasQty
+        FROM      [@CH_WMS_IQCRPT] t
+        INNER JOIN [@CH_WMS_IQCRPT_2] t0 ON t.DocEntry = t0.DocEntry
+        AND t.Canceled = 'N'
+        INNER JOIN [@CH_WMS_GOODSIN] t1 ON t0.U_CHKDoc = t1.DocEntry
+        INNER JOIN [@CH_WMS_GOODSIN_1] t2 ON t1.DocEntry = t2.DocEntry
+        AND t0.U_CHKLine = t2.LineId
+        WHERE     ISNULL(t0.U_State, '') &lt;&gt; 'R'
+        AND t0.U_PasQty > 0
+        AND ISNULL(t2.U_SFMJ, 'N') = 'N'
+        AND t.U_CkType = '03'
+        AND t0.DocEntry > 23000
+        UNION ALL
+        --免检
+        SELECT    t2.U_PoEntry ,
+        t2.U_Quantity
+        FROM      [@CH_WMS_GOODSIN] t1
+        INNER JOIN [@CH_WMS_GOODSIN_1] t2 ON t1.DocEntry = t2.DocEntry
+        WHERE     ISNULL(t2.U_State, '') &lt;&gt; 'R'
+        AND t1.Canceled = 'N'
+        AND t2.U_Quantity > 0
+        AND t2.U_SFMJ = 'Y'
+        AND t1.U_LogiType = '03'
+        ) h
+        GROUP BY h.U_PoEntry
+        ) t8 ON t0.DocEntry = t8.U_PoEntry
+        LEFT JOIN [dbo].[@JX_MRP001] t9 ON t0.ItemCode = t9.ItemCode
+        AND t9.NUM = 1
+        WHERE   t0.Status = 'R'
+        AND t0.PlannedQty - t0.CmpltQty - ISNULL(t7.U_Quantity, '0')
+        - ISNULL(t8.PasQty, '0') > 0
+        <if test="listDto.cardCode != null and listDto.cardCode != ''">
+            AND t0.OcrCode = #{listDto.cardCode}
+        </if>
+        <if test="listDto.itemCode !=null and listDto.itemCode != ''">
+            AND t0.itemCode like concat('%',#{listDto.itemCode},'%')
+        </if>
+        <if test="listDto.salesmanName !=null and listDto.salesmanName != ''">
+            AND t1.U_NAME = #{listDto.salesmanName}
+        </if>
+        <if test="listDto.arrivalDateAfter != null">
+            AND t0.DueDate &gt;= #{listDto.arrivalDateAfter}
+        </if>
+        <if test="listDto.arrivalDateBefore != null">
+            AND t0.DueDate &lt;= #{listDto.arrivalDateBefore}
+        </if>
+    </select>
+
+
+    <select id="unPlanUnpaidList" resultType="com.quaero.quaerosmartplatform.domain.vo.MaterialUnPlanListVo">
+        SELECT
+        t0.DocEntry docEntry ,
+        t0.LineNum lineNum ,
+        t0.ObjType objType ,
+        t0.DueDate shipDate ,
+        t1.U_NAME slpName ,
+        t0.OcrCode cardName ,
+        t0.ItemCode itemCode ,
+        t0.ProdName dscription ,
+        t0.PlannedQty - t0.CmpltQty - ISNULL(t7.U_Quantity, '0')
+        - ISNULL(t8.PasQty, '0') unpaidQuantity ,
+        t9.PMCZD pmcZD ,
+        t9.ZZQL zzql ,
+        t9.JYJFQTY * -1 jyjfQTY
+        FROM    dbo.OWOR t0
+        INNER JOIN dbo.OUSR t1 ON t0.UserSign = t1.USERID
+        LEFT JOIN ( SELECT  t1.U_PoEntry ,
+        SUM(t1.U_Quantity - ISNULL(t2.U_ApplQty, 0)) U_Quantity
+        FROM    [dbo].[@CH_WMS_GOODSIN] t0
+        INNER JOIN [dbo].[@CH_WMS_GOODSIN_1] t1 ON t0.DocEntry = t1.DocEntry
+        LEFT JOIN ( SELECT  h1.U_CHKDoc ,
+        h1.U_CHKLine ,
+        SUM(h1.U_ApplQty) U_ApplQty
+        FROM    [dbo].[@CH_WMS_IQCRPT] h0
+        INNER JOIN [dbo].[@CH_WMS_IQCRPT_2] h1 ON h0.DocEntry = h1.DocEntry
+        WHERE   h0.Canceled = 'N'
+        GROUP BY h1.U_CHKDoc ,
+        h1.U_CHKLine
+        ) t2 ON t1.DocEntry = t2.U_CHKDoc
+        AND t1.LineId = t2.U_CHKLine
+        WHERE   t0.Canceled = 'N'
+        AND ISNULL(t1.U_SFMJ, 'N') = 'N'
+        AND t1.U_Quantity - ISNULL(t2.U_ApplQty, 0) > 0
+        AND t0.U_LogiType = '03'
+        GROUP BY t1.U_PoEntry
+        ) t7 ON t0.DocEntry = t7.U_PoEntry
+        LEFT JOIN ( SELECT  h.U_PoEntry ,
+        SUM(ISNULL(h.U_PasQty, 0)) PasQty
+        FROM    (
+        --非免检
+        SELECT    t2.U_PoEntry ,
+        t0.U_PasQty
+        FROM      [@CH_WMS_IQCRPT] t
+        INNER JOIN [@CH_WMS_IQCRPT_2] t0 ON t.DocEntry = t0.DocEntry
+        AND t.Canceled = 'N'
+        INNER JOIN [@CH_WMS_GOODSIN] t1 ON t0.U_CHKDoc = t1.DocEntry
+        INNER JOIN [@CH_WMS_GOODSIN_1] t2 ON t1.DocEntry = t2.DocEntry
+        AND t0.U_CHKLine = t2.LineId
+        WHERE     ISNULL(t0.U_State, '') &lt;&gt; 'R'
+        AND t0.U_PasQty > 0
+        AND ISNULL(t2.U_SFMJ, 'N') = 'N'
+        AND t.U_CkType = '03'
+        AND t0.DocEntry > 23000
+        UNION ALL
+        --免检
+        SELECT    t2.U_PoEntry ,
+        t2.U_Quantity
+        FROM      [@CH_WMS_GOODSIN] t1
+        INNER JOIN [@CH_WMS_GOODSIN_1] t2 ON t1.DocEntry = t2.DocEntry
+        WHERE     ISNULL(t2.U_State, '') &lt;&gt; 'R'
+        AND t1.Canceled = 'N'
+        AND t2.U_Quantity > 0
+        AND t2.U_SFMJ = 'Y'
+        AND t1.U_LogiType = '03'
+        ) h
+        GROUP BY h.U_PoEntry
+        ) t8 ON t0.DocEntry = t8.U_PoEntry
+        LEFT JOIN [dbo].[@JX_MRP001] t9 ON t0.ItemCode = t9.ItemCode
+        AND t9.NUM = 1
+        WHERE   t0.Status = 'R'
+        AND t0.PlannedQty - t0.CmpltQty - ISNULL(t7.U_Quantity, '0')
+        - ISNULL(t8.PasQty, '0') > 0
+        <if test="listDto.cardCode != null and listDto.cardCode != ''">
+            AND t0.OcrCode = #{listDto.cardCode}
+        </if>
+        <if test="listDto.itemCode !=null and listDto.itemCode != ''">
+            AND t0.itemCode like concat('%',#{listDto.itemCode},'%')
+        </if>
+        <if test="listDto.salesmanName !=null and listDto.salesmanName != ''">
+            AND t1.U_NAME = #{listDto.salesmanName}
+        </if>
+        <if test="listDto.arrivalDateAfter != null">
+            AND t0.DueDate &gt;= #{listDto.arrivalDateAfter}
+        </if>
+        <if test="listDto.arrivalDateBefore != null">
+            AND t0.DueDate &lt;= #{listDto.arrivalDateBefore}
+        </if>
+    </select>
 </mapper>

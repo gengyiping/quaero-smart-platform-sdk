@@ -12,10 +12,7 @@ import com.quaero.quaerosmartplatform.domain.vo.*;
 import com.quaero.quaerosmartplatform.exceptions.BusinessException;
 import com.quaero.quaerosmartplatform.exceptions.DataNotFoundException;
 import com.quaero.quaerosmartplatform.exceptions.ParameterInvalidException;
-import com.quaero.quaerosmartplatform.service.MaterialPlanInfoService;
-import com.quaero.quaerosmartplatform.service.OitmService;
-import com.quaero.quaerosmartplatform.service.POR1Service;
-import com.quaero.quaerosmartplatform.service.UserService;
+import com.quaero.quaerosmartplatform.service.*;
 import com.quaero.quaerosmartplatform.utils.RedisUtil;
 import com.quaero.quaerosmartplatform.utils.StringUtil;
 import io.swagger.annotations.Api;
@@ -58,16 +55,20 @@ public class MaterialReceiptController {
     private final UserService userService;
     private final POR1Service por1Service;
     private final RedisUtil redisUtil;
+    private final OWORService oworService;
+    private final MaterialFlowService materialFlowService;
 
     @Value("${customize.redisTime}")
     private long redisTime;
 
-    public MaterialReceiptController(MaterialPlanInfoService materialPlanInfoService, OitmService oitmService, UserService userService, RedisUtil redisUtil, POR1Service por1Service) {
+    public MaterialReceiptController(MaterialPlanInfoService materialPlanInfoService, OitmService oitmService, UserService userService, RedisUtil redisUtil, POR1Service por1Service, OWORService oworService, MaterialFlowService materialFlowService) {
         this.materialPlanInfoService = materialPlanInfoService;
         this.oitmService = oitmService;
         this.userService = userService;
         this.por1Service = por1Service;
         this.redisUtil = redisUtil;
+        this.oworService = oworService;
+        this.materialFlowService = materialFlowService;
     }
 
     @PostMapping("/planListByOrder")
@@ -283,7 +284,12 @@ public class MaterialReceiptController {
     @ApiOperation("无计划到料未交查询结果")
     public MaterialUnPlanInfoVo unPlanListByOrderWithItemCode(@Validated @RequestBody MaterialUnPlanListDto dto) {
         MaterialUnPlanInfoVo infoVo = new MaterialUnPlanInfoVo();
-        List<MaterialUnPlanListVo> list = por1Service.unPlanUnpaidList(dto);
+        List<MaterialUnPlanListVo> list;
+        if (dto.isOrderType()) {
+            list = por1Service.unPlanUnpaidList(dto);
+        }else {
+            list = oworService.unPlanUnpaidList(dto);
+        }
         for (MaterialUnPlanListVo vo : list) {
             if (null == redisUtil.hget("unPlanList", vo.getDocEntry() + "," + vo.getLineNum())) {
                 redisUtil.hset("unPlanList", vo.getDocEntry() + "," + vo.getLineNum(), vo, redisTime);

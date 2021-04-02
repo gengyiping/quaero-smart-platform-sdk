@@ -11,10 +11,7 @@ import com.quaero.quaerosmartplatform.domain.enumeration.ValidityEnum;
 import com.quaero.quaerosmartplatform.domain.vo.MaterialPlanUnpaidListVo;
 import com.quaero.quaerosmartplatform.exceptions.BusinessException;
 import com.quaero.quaerosmartplatform.exceptions.DataNotFoundException;
-import com.quaero.quaerosmartplatform.service.MaterialPlanInfoService;
-import com.quaero.quaerosmartplatform.service.OPORService;
-import com.quaero.quaerosmartplatform.service.POR1Service;
-import com.quaero.quaerosmartplatform.service.UserService;
+import com.quaero.quaerosmartplatform.service.*;
 import com.quaero.quaerosmartplatform.utils.RedisUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
@@ -28,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,26 +49,28 @@ public class MaterialPlanInfoController {
     private final RedisUtil redisUtil;
     private final POR1Service por1Service;
     private final UserService userService;
+    private final OWORService oworService;
 
     @Value("${customize.redisTime}")
     private long redisTime;
 
-    public MaterialPlanInfoController(MaterialPlanInfoService materialPlanInfoService, OPORService oporService, RedisUtil redisUtil, POR1Service por1Service, UserService userService) {
+    public MaterialPlanInfoController(MaterialPlanInfoService materialPlanInfoService, OPORService oporService, RedisUtil redisUtil, POR1Service por1Service, UserService userService, OWORService oworService) {
         this.materialPlanInfoService = materialPlanInfoService;
         this.oporService = oporService;
         this.redisUtil = redisUtil;
         this.por1Service = por1Service;
         this.userService = userService;
+        this.oworService = oworService;
     }
 
     @PostMapping("/unpaidListByOrder")
     @ApiOperation("按订单计划到料未交查询列表")
     public List<MaterialPlanUnpaidListVo> unpaidListByOrder(@Validated @RequestBody MaterialPlanUnpaidListDto unpaidListDto) {
-        List<MaterialPlanUnpaidListVo> listVos = new ArrayList<>();
+        List<MaterialPlanUnpaidListVo> listVos;
         if (unpaidListDto.getOrderType() == 0) {
             listVos = por1Service.unpaidList(unpaidListDto);
         } else {
-            listVos = listVos;
+            listVos = oworService.unpaidList(unpaidListDto);
         }
         if (listVos.size() <= 0) {
             throw new BusinessException(ResultCode.RESULT_DATA_NONE);
@@ -146,6 +144,9 @@ public class MaterialPlanInfoController {
                     .uTaxDate(new Date())
                     .uDLFS(vo.getDlfs())
                     .uWLXX(vo.getWlxx())
+                    .UPMCZD(vo.getPmcZD())
+                    .UZZQL(vo.getZzql())
+                    .UJYJFQTY(vo.getJyjfQTY())
                     .build();
             if (materialPlanInfoService.count(new QueryWrapper<>(info)) > 0) {
                 insert.setUId(materialPlanInfoService.list(new QueryWrapper<>(info)).get(0).getUId());

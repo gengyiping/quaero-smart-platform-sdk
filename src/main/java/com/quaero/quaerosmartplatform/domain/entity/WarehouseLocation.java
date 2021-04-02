@@ -17,7 +17,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 物料流转物理位置数据表
+ * 物料流转物理位置数据表 库存
  * </p>
  *
  * @author wuhanzhang@

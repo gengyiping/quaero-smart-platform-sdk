@@ -50,4 +50,10 @@ public class MaterialUnPlanListVo {
     private String ulj;
     @ApiModelProperty("图片数量")
     private String uPic;
+    @ApiModelProperty("PMC指定交货方式")
+    private String pmcZD;
+    @ApiModelProperty("最早缺料日期")
+    private String zzql;
+    @ApiModelProperty("建议交付数量")
+    private String jyjfQTY;
 }

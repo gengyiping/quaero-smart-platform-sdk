@@ -232,4 +232,23 @@ public class MaterialPlanInfo implements Serializable {
      */
     @TableField("U_CardName")
     private String UCardName;
+
+    /**
+     * 最早缺料日期
+     */
+    @TableField("U_ZZQL")
+    private Date UZZQL;
+
+    /**
+     * PMC指定交货方式
+     */
+    @TableField("U_PMCZD")
+    private String UPMCZD;
+
+    /**
+     * 建议交付数量
+     */
+    @TableField("U_JYJFQTY")
+    private BigDecimal UJYJFQTY;
+
 }

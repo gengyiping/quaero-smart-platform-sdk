@@ -38,6 +38,12 @@ public class MaterialPlanUnpaidListVo {
     private String cardName;
     @ApiModelProperty("来源类型")
     private String objType;
+    @ApiModelProperty("PMC指定交货方式")
+    private String pmcZD;
+    @ApiModelProperty("最早缺料日期")
+    private Date zzql;
+    @ApiModelProperty("建议交付数量")
+    private BigDecimal jyjfQTY;
     @ApiModelProperty("计划到料数")
     private BigDecimal plannedQty;
     @ApiModelProperty("计划到料日期")

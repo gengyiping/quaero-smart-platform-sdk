@@ -1,7 +1,13 @@
 package com.quaero.quaerosmartplatform.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.quaero.quaerosmartplatform.domain.dto.MaterialPlanUnpaidListDto;
+import com.quaero.quaerosmartplatform.domain.dto.MaterialUnPlanListDto;
 import com.quaero.quaerosmartplatform.domain.entity.OWOR;
+import com.quaero.quaerosmartplatform.domain.vo.MaterialPlanUnpaidListVo;
+import com.quaero.quaerosmartplatform.domain.vo.MaterialUnPlanListVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +19,7 @@ import com.quaero.quaerosmartplatform.domain.entity.OWOR;
  */
 public interface OWORService extends IService<OWOR> {
 
+    List<MaterialPlanUnpaidListVo> unpaidList(MaterialPlanUnpaidListDto materialPlanUnpaidListDto);
+
+    List<MaterialUnPlanListVo> unPlanUnpaidList(MaterialUnPlanListDto dto);
 }
