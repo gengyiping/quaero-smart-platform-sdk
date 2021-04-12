@@ -41,7 +41,7 @@ public class MaterialPlanUnpaidListVo {
     @ApiModelProperty("PMC指定交货方式")
     private String pmcZD;
     @ApiModelProperty("最早缺料日期")
-    private Date zzql;
+    private String zzql;
     @ApiModelProperty("建议交付数量")
     private BigDecimal jyjfQTY;
     @ApiModelProperty("计划到料数")

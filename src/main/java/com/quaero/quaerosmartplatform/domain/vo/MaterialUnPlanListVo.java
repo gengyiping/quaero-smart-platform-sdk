@@ -55,5 +55,5 @@ public class MaterialUnPlanListVo {
     @ApiModelProperty("最早缺料日期")
     private String zzql;
     @ApiModelProperty("建议交付数量")
-    private String jyjfQTY;
+    private BigDecimal jyjfQTY;
 }

@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -105,7 +107,8 @@ public class MaterialPlanInfoController {
 
     @PutMapping("/unpaidByOrder")
     @ApiOperation("按订单计划到料提交到料计划")
-    public void unpaidByOrder(@Validated @RequestBody List<MaterialUnpaidPutByOrder> puts, Authentication authentication) {
+    public void unpaidByOrder(@Validated @RequestBody List<MaterialUnpaidPutByOrder> puts, Authentication authentication) throws ParseException {
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
         for (MaterialUnpaidPutByOrder put : puts) {
             MaterialPlanUnpaidListVo vo = (MaterialPlanUnpaidListVo) redisUtil.hget("unpaidListByOrder", put.getDocEntry() + "," + put.getLineNum());
             if (vo == null) {
@@ -145,7 +148,7 @@ public class MaterialPlanInfoController {
                     .uDLFS(vo.getDlfs())
                     .uWLXX(vo.getWlxx())
                     .UPMCZD(vo.getPmcZD())
-                    .UZZQL(vo.getZzql())
+                    .UZZQL(ft.parse(vo.getZzql()))
                     .UJYJFQTY(vo.getJyjfQTY())
                     .build();
             if (materialPlanInfoService.count(new QueryWrapper<>(info)) > 0) {
