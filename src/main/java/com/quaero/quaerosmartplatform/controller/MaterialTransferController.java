@@ -89,6 +89,7 @@ public class MaterialTransferController {
             info.setItemCode(l.getItemCode());
             info.setDisNum(l.getDisNum());
             info.setQty(l.getUQty());
+
             info.setCreator(l.getUCreator());
             info.setDocDate(l.getUDocdate());
             info.setOl(StringUtil.isEmpty(l.getUYdwz()) ? l.getUGdwz() : l.getUYdwz());
