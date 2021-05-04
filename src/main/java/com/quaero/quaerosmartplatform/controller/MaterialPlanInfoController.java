@@ -13,6 +13,7 @@ import com.quaero.quaerosmartplatform.exceptions.BusinessException;
 import com.quaero.quaerosmartplatform.exceptions.DataNotFoundException;
 import com.quaero.quaerosmartplatform.service.*;
 import com.quaero.quaerosmartplatform.utils.RedisUtil;
+import com.quaero.quaerosmartplatform.utils.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
@@ -148,7 +149,7 @@ public class MaterialPlanInfoController {
                     .uDLFS(vo.getDlfs())
                     .uWLXX(vo.getWlxx())
                     .UPMCZD(vo.getPmcZD())
-                    .UZZQL(ft.parse(vo.getZzql()))
+                    .UZZQL(StringUtil.isEmpty(vo.getZzql())?null:ft.parse(vo.getZzql()))
                     .UJYJFQTY(vo.getJyjfQTY())
                     .build();
             if (materialPlanInfoService.count(new QueryWrapper<>(info)) > 0) {
