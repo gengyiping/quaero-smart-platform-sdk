@@ -131,7 +131,7 @@
         t2.CardName cardName,
         t1.ItemCode itemCode,
         t1.Dscription dscription,
-        t1.OpenQty - ISNULL( t7.U_Quantity, '0' ) - ISNULL( t8.PasQty, '0' ) unpaidQuantity
+        t1.OpenQty - ISNULL( t7.U_Quantity, '0' ) - ISNULL( t8.PasQty, '0' ) unpaidQuantity,
         t9.PMCZD pmcZD ,
         t9.ZZQL zzql ,
         t9.JYJFQTY * -1 jyjfQTY

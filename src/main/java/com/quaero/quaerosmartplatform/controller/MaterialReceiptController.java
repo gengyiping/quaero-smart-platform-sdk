@@ -93,7 +93,7 @@ public class MaterialReceiptController {
             }
         }
         infoVo.setFlag(false);
-        if (StringUtil.isNotEmpty(listDto.getCareCode())) {
+        if (StringUtil.isNotEmpty(listDto.getCardCode())) {
             if (listDto.getArrivalDateAfter() != null
                     && listDto.getArrivalDateBefore() != null) {
                 //按供应商代号、料号、日期

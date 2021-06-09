@@ -103,7 +103,7 @@
         t0.OcrCode cardName ,
         t0.ItemCode itemCode ,
         t0.ProdName dscription ,
-        t0.PlannedQty - t0.CmpltQty - ISNULL(t7.U_Quantity, '0')
+        t0.PlannedQty - t0.CmpltQty - ISNULL(t7.U_Quantity, '0') ,
         - ISNULL(t8.PasQty, '0') unpaidQuantity ,
         t9.PMCZD pmcZD ,
         t9.ZZQL zzql ,

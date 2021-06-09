@@ -12,8 +12,8 @@
     U_CardCode cardCode, U_CardName cardName, U_ItemCode itemCode, U_ItemName itemName
     FROM [dbo].[@JX_PDA009]
     WHERE U_SLBS = 'N' AND U_GQBS = 'N' AND U_SJBS = 'N'
-        <if test="listDto.careCode != null and listDto.careCode != ''">
-            AND U_CardCode = #{listDto.careCode}
+        <if test="listDto.cardCode != null and listDto.cardCode != ''">
+            AND U_CardCode = #{listDto.cardCode}
         </if>
         <if test="listDto.itemCode !=null and listDto.itemCode != ''">
             AND U_ItemCode like concat('%',#{listDto.itemCode},'%')

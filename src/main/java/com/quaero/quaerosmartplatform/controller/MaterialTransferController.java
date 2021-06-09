@@ -193,6 +193,9 @@ public class MaterialTransferController {
     @PostMapping("/stockBatchInquire")
     @ApiOperation("库存批转移查找接口")
     public MaterialTransferBatchInfo stockBatchInquire(@RequestBody MaterialTransferBatchSearchDto dto) {
+        if (StringUtil.isEmpty(dto.getLocation())){
+            throw new BusinessException(ResultCode.PARAM_IS_BLANK);
+        }
         //库存怎么做
         List<WarehouseLocation> list = warehouseLocationService.lambdaQuery()
                 .eq(WarehouseLocation::getUYdwz, dto.getLocation())
@@ -226,6 +229,9 @@ public class MaterialTransferController {
     @ApiOperation("非库存批转移查找接口")
     public MaterialTransferBatchInfo nonStockBatchInquire(@RequestBody MaterialTransferBatchSearchDto dto) {
         //非库存
+        if (StringUtil.isEmpty(dto.getLocation())){
+            throw new BusinessException(ResultCode.PARAM_IS_BLANK);
+        }
         List<MaterialFlow> list = materialFlowService.lambdaQuery()
                 .eq(MaterialFlow::getUYdwz, dto.getLocation())
                 .eq(MaterialFlow::getUActive, ValidityEnum.VALID).list();
@@ -269,12 +275,18 @@ public class MaterialTransferController {
     @PostMapping("/stockBatch")
     @ApiOperation("确认库存批转移物料接口")
     public void confirmStockBatch(@RequestBody MaterialTransferBatchUpdateDto dto) {
+        if (StringUtil.isEmpty(dto.getLocation())||StringUtil.isEmpty(dto.getTargetLocation())){
+            throw new BusinessException(ResultCode.PARAM_IS_BLANK);
+        }
         warehouseLocationService.confirmStockMaterialBatchTransfer(dto);
     }
 
     @PostMapping("/nonStockBatch")
     @ApiOperation("确认非库存批转移物料接口")
     public void confirmNonStockBatch(@RequestBody MaterialTransferBatchUpdateDto dto) {
+        if (StringUtil.isEmpty(dto.getLocation())||StringUtil.isEmpty(dto.getTargetLocation())){
+            throw new BusinessException(ResultCode.PARAM_IS_BLANK);
+        }
         materialFlowService.confirmNonStockMaterialBatchTransfer(dto);
     }
 }

@@ -19,7 +19,7 @@ import java.util.Date;
 @ApiModel
 public class MaterialPlanListDto {
     @ApiModelProperty(value = "供应商代号")
-    private String careCode;
+    private String cardCode;
     @ApiModelProperty(value = "料号")
     private String itemCode;
     @ApiModelProperty(value = "业务员")
